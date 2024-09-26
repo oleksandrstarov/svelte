@@ -1,9 +1,10 @@
-<script lang="ts">
-	import svelteLogo from './assets/svelte.svg';
+<script>
+    import svelteLogo from './assets/svelte.svg';
+    import {Badge} from "flowbite-svelte";
 </script>
 
 <main>
-	App
-	<img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
+    <Badge>App</Badge>
+    <img src={svelteLogo} alt="Svelte Logo"/>
 </main>
 
