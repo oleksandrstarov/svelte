@@ -4,7 +4,7 @@ This document describes the recommended file structure for a Svelte application.
 
 ## Project Structure
 
-  ```plaintext
+```plaintext
 svelte
 ├── public/
 │ │ └── favicon.ico
@@ -15,7 +15,7 @@ svelte
 │ ├── styles/
 │ ├── routes/
 │ ├── App.svelte
-│ └── main.js 
+│ └── main.js
 ├── package.json
 ├── vite.config.js
 └── README.md
@@ -39,16 +39,18 @@ This is where the main application code resides.
 - **`components/`**: Stores reusable Svelte components.
 
   Example:
+
   ```plaintext
   components/
   ├── Button.svelte
   ├── Card.svelte
   └── Header.svelte
   ```
+
 - **`stores/`**: Contains Svelte stores for managing global state.
 
 Example:
-```plaintext```
+`plaintext`
 
 ```plaintext
 stores/
@@ -67,5 +69,4 @@ routes/
   ├── Home.svelte
   ├── About.svelte
   └── Contact.svelte
-  ```
-
+```
