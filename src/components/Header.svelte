@@ -9,7 +9,7 @@
   // TODO replace dummyCity once favorite places ready
 </script>
 
-<header class="flex justify-between pt-5 px-10 sm:items-center">
+<header class="flex justify-between pt-2 px-4 md:pt-5 md:px-10 sm:items-center">
   <div class="flex sm:items-center">
     <img class="h-12" src="{logo}" alt="logo" />
     {#if !dummyIsSearch}
