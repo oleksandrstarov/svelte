@@ -9,5 +9,5 @@
 
 <main>
   <Badge>App</Badge>
-  <img src="{svelteLogo}" alt="Svelte Logo" />
+  <img src={svelteLogo} alt="Svelte Logo" />
 </main>
