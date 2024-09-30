@@ -29,8 +29,8 @@
   }
 
   const toggleIsSearchButton = () => {
+    searchValue = '';
     isSearchButton = !isSearchButton;
-    placesAutocomplete = [];
   };
 
   const updateSearchValue = debounce(async value => {
