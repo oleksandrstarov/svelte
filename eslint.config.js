@@ -27,7 +27,11 @@ export default [
       semi: 'warn', // semicolon
       complexity: 'warn', // Limit Cyclomatic Complexity
       curly: 'warn', // Enforce Usage of Spacing in Template Strings
+      'svelte/valid-compile': 'off',
+      jsxDoubleQuote: 'off',
+      'a11y/missing-content': 'off',
       'space-before-blocks': 'error',
+      'jsx-quotes': 'off',
       'no-multi-spaces': ['error', { ignoreEOLComments: false }], // Disallow multiple spaces
       'comma-spacing': ['error', { before: false, after: true }], // Enforce consistent spacing before and after commas
       'arrow-spacing': ['warn', { before: true, after: true }], // Enforce consistent spacing before and after the arrow in arrow functions
