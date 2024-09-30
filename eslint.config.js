@@ -53,7 +53,6 @@ export default [
       'one-var': ['error', 'never'], // enforce variables to be declared either together or separately in functions
       'prefer-const': 'warn', // Suggest using const
       'quote-props': ['warn', 'as-needed'], // require quotes around object literal property names
-      'space-before-function-paren': 'warn', // Require or disallow a space before function parenthesis
       'spaced-comment': [
         // Requires or disallows a whitespace (space or tab) beginning a comment
         'warn',
