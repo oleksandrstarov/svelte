@@ -1,18 +1,20 @@
 <script>
   import logo from '/src/assets/svelte.svg';
   import { Button } from 'flowbite-svelte';
+  import { link, location } from 'svelte-spa-router';
 
   const dummyCity = 'Ukraine, Kyiv, elevation 199m';
-  const dummyIsSearch = false;
-  // TODO add redirection on the / on click logo
-  // TODO replace dummyIsSearch with data from url
   // TODO replace dummyCity once favorite places ready
+
+  $: isSearchPage = $location.includes('/search');
 </script>
 
-<header class="flex justify-between pt-2 px-4 md:pt-5 md:px-10 sm:items-center">
+<header class="flex justify-between pt-2 px-4 md:pt-5 md:px-10 sm:items-center sticky">
   <div class="flex sm:items-center">
-    <img class="h-12" src="{logo}" alt="logo" />
-    {#if !dummyIsSearch}
+    <a use:link={{ href: '/' }}>
+      <img class="h-12" src={logo} alt="logo" />
+    </a>
+    {#if !isSearchPage}
       <div class="flex flex-col ml-3">
         <h1 class="text-xl">Svelte</h1>
         <span class="text-sm pr-2">{dummyCity}</span>
