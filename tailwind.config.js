@@ -12,7 +12,7 @@ export default {
       colors: {
         // flowbite-svelte
         primary: {
-          50: '#e9f1ff',
+          50: '#E9F1FF',
           100: '#BBDEFB',
           200: '#90CAF9',
           300: '#64B5F6',
