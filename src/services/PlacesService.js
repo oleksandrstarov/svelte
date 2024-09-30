@@ -2,18 +2,18 @@ import axios from 'axios';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
+const baseUrl = 'https://maps.googleapis.com/maps/api/place/';
 
 class PlacesService {
-  async getAutocomplete(location) {
+  async getAutocomplete(input) {
     try {
-      const autocomplete_url =
-        env.VITE_NODE_ENV === 'production'
-          ? 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-          : '/autocomplete-api';
+      const autocompleteUrl =
+        env.VITE_NODE_ENV === 'production' ? `${baseUrl}autocomplete/json` : '/autocomplete-api';
 
-      const query = location.replace(new RegExp(' ', 'g'), '%');
-      const apiUrl = `${autocomplete_url}?key=${apiKey}&input=${query}&types=geocode`;
-      const response = await axios.get(apiUrl);
+      const formattedInput = input.replace(new RegExp(' ', 'g'), '%');
+      const endpoint = `${autocompleteUrl}?key=${apiKey}&input=${formattedInput}&types=geocode`;
+
+      const response = await axios.get(endpoint);
 
       return response.data;
     } catch (e) {
@@ -24,13 +24,11 @@ class PlacesService {
   async getPlace(placeId) {
     try {
       const placeUrl =
-        env.VITE_NODE_ENV === 'production'
-          ? 'https://maps.googleapis.com/maps/api/place/details/json'
-          : '/details-api';
+        env.VITE_NODE_ENV === 'production' ? `${baseUrl}details/json` : '/details-api';
 
-      const apiUrl = `${placeUrl}?key=${apiKey}&place_id=${placeId}`;
+      const endpoint = `${placeUrl}?key=${apiKey}&place_id=${placeId}`;
 
-      const response = await axios.get(apiUrl);
+      const response = await axios.get(endpoint);
 
       return response.data;
     } catch (e) {

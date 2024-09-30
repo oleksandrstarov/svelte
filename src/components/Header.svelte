@@ -24,7 +24,7 @@
       placesAutocomplete = [];
       searchInputRef?.focus();
     } else {
-      handleAutocomplete(searchValue);
+      getAutocomplete(searchValue);
     }
   }
 
@@ -37,7 +37,7 @@
     searchValue = value;
   }, 300);
 
-  const handleAutocomplete = async value => {
+  const getAutocomplete = async value => {
     isAutocompleteLoading = true;
 
     const { predictions } = await placesService.getAutocomplete(value);
@@ -126,7 +126,7 @@
               {/if}
             {/each}
             {#if isNoData}
-              <div>No data</div>
+              <li class="py-2 px-2 text-center">No data</li>
             {/if}
           </ul>
         </div>
