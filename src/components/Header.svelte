@@ -34,7 +34,7 @@
   };
 
   const updateSearchValue = debounce(async value => {
-    searchValue = value;
+    searchValue = value.trim();
   }, 300);
 
   const getAutocomplete = async value => {
@@ -54,7 +54,7 @@
   };
 
   const onKeydown = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && placesAutocomplete.length) {
       navigateToForecast(placesAutocomplete[0]['place_id']);
     }
   };
