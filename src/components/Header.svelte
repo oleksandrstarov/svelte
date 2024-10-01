@@ -35,10 +35,6 @@
     }
   }
 
-  const onLangUpdate = event => {
-    console.log(event.target.value);
-    locale.set(event.target.value);
-  };
   const toggleIsSearchButton = () => {
     searchValue = '';
     isSearchButton = !isSearchButton;
@@ -102,7 +98,7 @@
         class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
         items={languages}
         value={selectedLang}
-        on:input={onLangUpdate}
+        on:input={({ target: { value } }) => locale.set(value)}
       />
     </div>
   {:else}
@@ -112,7 +108,7 @@
           <Input
             value={searchValue}
             placeholder={$t('header.searchPlaceholder')}
-            class="w-full h-12"
+            class="w-full h-12 my-2"
             on:keydown={onKeydown}
             on:input={({ target: { value } }) => updateSearchValue(value)}
           >
