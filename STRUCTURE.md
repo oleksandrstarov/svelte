@@ -11,7 +11,7 @@ svelte
 ├── src/
 │ ├── assets/
 │ ├── components/
-│ ├── dirictives/
+│ ├── directives/
 │ ├── stores/
 │ ├── styles/
 │ ├── services/
