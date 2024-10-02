@@ -1,10 +1,17 @@
 <script>
   import logo from '/src/assets/svelte.svg';
   import { link, location, push } from 'svelte-spa-router';
-  import { Button, Input } from 'flowbite-svelte';
+  import { Button, Input, Select } from 'flowbite-svelte';
   import placesService from '../services/placesService';
   import { clickOutside } from '../directives/clickOutside';
   import { debounce } from 'lodash';
+  import { t, locale } from 'svelte-i18n';
+
+  const languages = [
+    { value: 'en-US', name: $t('header.language.en') },
+    { value: 'ua-UA', name: $t('header.language.ua') },
+  ];
+  const dummyCity = 'Ukraine, Kyiv, elevation 199m'; // TODO replace dummyCity once favorite places ready
 
   let searchInputContainerRef;
 
@@ -12,12 +19,12 @@
   let placesAutocomplete = [];
   let isSearchButton = true;
   let isAutocompleteLoading = false;
-  const dummyCity = 'Ukraine, Kyiv, elevation 199m'; // TODO replace dummyCity once favorite places ready
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
   $: isNoData = !placesAutocomplete.length && searchValue && !isAutocompleteLoading;
   $: isSearchPage = $location.includes('/search');
+  $: selectedLang = $locale;
 
   $: {
     if (!searchValue) {
@@ -47,7 +54,7 @@
   };
 
   const navigateToForecast = async placeId => {
-    const { lat, lng } = (await placesService.getPlace(placeId)).result.geometry.location;
+    const { lat, lng } = await placesService.getPlaceLocation(placeId);
 
     toggleIsSearchButton();
     push(`/forecast/${lat}/${lng}`);
@@ -76,23 +83,32 @@
   </div>
 
   {#if isSearchButton}
-    <Button
-      size="xs"
-      class="text-md text-primary-700 outline-primary-700 m-2 sm:m-0 hover:bg-primary-50 hover:text-primary-700 focus-within:ring-0"
-      outline
-      on:click={toggleIsSearchButton}
-    >
-      <span class="material-symbols-outlined pr-1">search</span>
-      Search
-    </Button>
+    <div class="flex">
+      <Button
+        size="xs"
+        class="text-md text-primary-700 outline-primary-700 m-2 hover:bg-primary-50 hover:text-primary-700 focus-within:ring-0"
+        outline
+        on:click={toggleIsSearchButton}
+      >
+        <span class="material-symbols-outlined pr-1">search</span>
+        {$t('header.search')}
+      </Button>
+      <Select
+        placeholder=""
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
+        items={languages}
+        value={selectedLang}
+        on:input={({ target: { value } }) => locale.set(value)}
+      />
+    </div>
   {:else}
     <div class="flex-grow">
       <div class="pl-4 md:pl-10 relative" use:clickOutside on:clickOutside={toggleIsSearchButton}>
         <div class="content" bind:this={searchInputContainerRef}>
           <Input
             value={searchValue}
-            placeholder="Enter your city"
-            class="w-full h-12"
+            placeholder={$t('header.searchPlaceholder')}
+            class="w-full h-12 my-2"
             on:keydown={onKeydown}
             on:input={({ target: { value } }) => updateSearchValue(value)}
           >
@@ -126,7 +142,7 @@
               {/if}
             {/each}
             {#if isNoData}
-              <li class="py-2 px-2 text-center">No data</li>
+              <li class="py-2 px-2 text-center">{$t('general.noData')}</li>
             {/if}
           </ul>
         </div>

@@ -1,0 +1,13 @@
+{
+  "general": {
+    "noData": "No data"
+  },
+  "header": {
+    "search": "Search",
+    "searchPlaceholder": "Enter your city",
+    "language": {
+      "en":"EN",
+      "ua":"UA"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "general": {
+    "noData": "Немає даних"
+  },
+  "header": {
+    "search": "Пошук",
+    "searchPlaceholder": "Введіть ваше місто",
+    "language": {
+      "en": "АНГЛ",
+      "ua": "УКР"
+    }
+  }
+}
