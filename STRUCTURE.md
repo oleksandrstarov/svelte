@@ -11,8 +11,10 @@ svelte
 ├── src/
 │ ├── assets/
 │ ├── components/
+│ ├── directives/
 │ ├── stores/
 │ ├── styles/
+│ ├── services/
 │ ├── routes/
 │ ├── App.svelte
 │ └── main.js
@@ -47,6 +49,8 @@ This is where the main application code resides.
   └── Header.svelte
   ```
 
+- **`directives//`**: Contains directives.
+
 - **`stores/`**: Contains Svelte stores for managing global state.
 
 Example:
@@ -57,6 +61,8 @@ stores/
 ├── userStore.js
 └── weatherStore.js
 ```
+
+- **`services/`**: Contains services for work with API.
 
 - **`styles/`**: Contains global styles and variables. It can also include specific styles for your components.
 

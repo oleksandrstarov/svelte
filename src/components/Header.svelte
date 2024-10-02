@@ -1,34 +1,136 @@
 <script>
   import logo from '/src/assets/svelte.svg';
-  import { Button } from 'flowbite-svelte';
-  import { link, location } from 'svelte-spa-router';
+  import { link, location, push } from 'svelte-spa-router';
+  import { Button, Input } from 'flowbite-svelte';
+  import placesService from '../services/placesService';
+  import { clickOutside } from '../directives/clickOutside';
+  import { debounce } from 'lodash';
 
-  const dummyCity = 'Ukraine, Kyiv, elevation 199m';
-  // TODO replace dummyCity once favorite places ready
+  let searchInputContainerRef;
 
+  let searchValue = '';
+  let placesAutocomplete = [];
+  let isSearchButton = true;
+  let isAutocompleteLoading = false;
+  const dummyCity = 'Ukraine, Kyiv, elevation 199m'; // TODO replace dummyCity once favorite places ready
+
+  $: searchInputRef = searchInputContainerRef?.querySelector('input');
+
+  $: isNoData = !placesAutocomplete.length && searchValue && !isAutocompleteLoading;
   $: isSearchPage = $location.includes('/search');
+
+  $: {
+    if (!searchValue) {
+      placesAutocomplete = [];
+      searchInputRef?.focus();
+    } else {
+      getAutocomplete(searchValue);
+    }
+  }
+
+  const toggleIsSearchButton = () => {
+    searchValue = '';
+    isSearchButton = !isSearchButton;
+  };
+
+  const updateSearchValue = debounce(async value => {
+    searchValue = value.trim();
+  }, 300);
+
+  const getAutocomplete = async value => {
+    isAutocompleteLoading = true;
+
+    const { predictions } = await placesService.getAutocomplete(value);
+
+    placesAutocomplete = [...predictions];
+    isAutocompleteLoading = false;
+  };
+
+  const navigateToForecast = async placeId => {
+    const { lat, lng } = (await placesService.getPlace(placeId)).result.geometry.location;
+
+    toggleIsSearchButton();
+    push(`/forecast/${lat}/${lng}`);
+  };
+
+  const onKeydown = e => {
+    if (e.key === 'Enter' && placesAutocomplete.length) {
+      navigateToForecast(placesAutocomplete[0]['place_id']);
+    }
+  };
 </script>
 
-<header class="flex justify-between pt-2 px-4 md:pt-5 md:px-10 sm:items-center sticky">
+<header
+  class="flex justify-center flex-wrap pt-2 px-4 md:pt-5 md:px-10 sm:justify-between sm:items-center sticky"
+>
   <div class="flex sm:items-center">
     <a use:link={{ href: '/' }}>
       <img class="h-12" src={logo} alt="logo" />
     </a>
-    {#if !isSearchPage}
+    {#if !isSearchPage && isSearchButton}
       <div class="flex flex-col ml-3">
         <h1 class="text-xl">Svelte</h1>
         <span class="text-sm pr-2">{dummyCity}</span>
       </div>
     {/if}
   </div>
-  <div>
+
+  {#if isSearchButton}
     <Button
       size="xs"
-      class="text-md text-primary-700 outline-primary-700 hover:bg-primary-50 hover:text-primary-700 focus-within:ring-0"
+      class="text-md text-primary-700 outline-primary-700 m-2 sm:m-0 hover:bg-primary-50 hover:text-primary-700 focus-within:ring-0"
       outline
+      on:click={toggleIsSearchButton}
     >
       <span class="material-symbols-outlined pr-1">search</span>
       Search
     </Button>
-  </div>
+  {:else}
+    <div class="flex-grow">
+      <div class="pl-4 md:pl-10 relative" use:clickOutside on:clickOutside={toggleIsSearchButton}>
+        <div class="content" bind:this={searchInputContainerRef}>
+          <Input
+            value={searchValue}
+            placeholder="Enter your city"
+            class="w-full h-12"
+            on:keydown={onKeydown}
+            on:input={({ target: { value } }) => updateSearchValue(value)}
+          >
+            <span slot="left" class="material-symbols-outlined">search</span>
+            <span class="flex items-center" slot="right">
+              {#if searchValue && !isAutocompleteLoading}
+                <span
+                  class="material-symbols-outlined cursor-pointer"
+                  on:click={() => (searchValue = '')}
+                >
+                  cancel
+                </span>
+              {:else if searchValue && isAutocompleteLoading}
+                <span class="material-symbols-outlined animate-spin"> refresh </span>
+              {/if}
+            </span>
+          </Input>
+        </div>
+
+        <div class="absolute mt-1 w-full pr-4 md:pr-10 top bg-white">
+          <ul class="shadow-lg rounded-md mt-1 max-h-80 overflow-y-auto">
+            {#each placesAutocomplete as { description, place_id: placeId }, i (placeId)}
+              <li
+                class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700"
+                on:click={() => navigateToForecast(placeId)}
+              >
+                {description}
+              </li>
+              {#if i !== placesAutocomplete.length - 1}
+                <hr />
+              {/if}
+            {/each}
+            {#if isNoData}
+              <li class="py-2 px-2 text-center">No data</li>
+            {/if}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {/if}
 </header>

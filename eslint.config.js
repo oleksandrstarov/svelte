@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import svelte from 'eslint-plugin-svelte';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -21,6 +22,9 @@ export default [
     ignores: ['build/', '.svelte-kit/', 'dist/'],
   },
   {
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
       indent: ['error', 2], // enforce consistent indentation
       quotes: ['error', 'single'],
@@ -53,7 +57,6 @@ export default [
       'one-var': ['error', 'never'], // enforce variables to be declared either together or separately in functions
       'prefer-const': 'warn', // Suggest using const
       'quote-props': ['warn', 'as-needed'], // require quotes around object literal property names
-      'space-before-function-paren': 'warn', // Require or disallow a space before function parenthesis
       'spaced-comment': [
         // Requires or disallows a whitespace (space or tab) beginning a comment
         'warn',
@@ -73,6 +76,14 @@ export default [
         {
           ArrayExpression: 'consistent',
           ArrayPattern: { minItems: 2 },
+        },
+      ],
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'never',
+          svelte: 'never',
         },
       ],
     },
