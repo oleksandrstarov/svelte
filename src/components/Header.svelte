@@ -54,7 +54,7 @@
   };
 
   const navigateToForecast = async placeId => {
-    const { lat, lng } = (await placesService.getPlace(placeId)).result.geometry.location;
+    const { lat, lng } = await placesService.getPlaceLocation(placeId);
 
     toggleIsSearchButton();
     push(`/forecast/${lat}/${lng}`);
