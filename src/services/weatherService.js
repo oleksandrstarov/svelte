@@ -29,21 +29,6 @@ class WeatherService {
       throw error;
     }
   }
-
-  async fetchWeatherData(latitude, longitude) {
-    const data = await this.getWeather(latitude, longitude);
-
-    return {
-      temperature: data.current.temperature_2m,
-      feelsLike: data.current.apparent_temperature,
-      precipitation: data.current.precipitation,
-      weatherCode: data.current.weather_code,
-      windSpeed: data.current.wind_speed_10m,
-      windGusts: data.current.wind_gusts_10m,
-      windDirection: data.current.wind_direction_10m,
-      time: data.current.time,
-    };
-  }
 }
 
 const weatherService = new WeatherService();

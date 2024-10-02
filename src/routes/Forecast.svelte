@@ -10,10 +10,10 @@
     weatherData.isLoading = true;
     weatherData.hasError = false;
 
-    try {
       const data = await weatherService.getWeather(latitude, longitude);
 
       if (!data) {
+        weatherData.isLoading = false;
         weatherData.hasError = true;
         return;
       }
@@ -30,12 +30,6 @@
         isLoading: false,
         hasError: false,
       };
-    } catch (error) {
-      weatherData.hasError = true;
-      console.error("Error fetching weather data:", error);
-    } finally {
-      weatherData.isLoading = false;
-    }
   }
 
   $: if (params.latitude && params.longitude) {
