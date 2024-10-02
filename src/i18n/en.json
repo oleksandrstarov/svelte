@@ -1,11 +1,11 @@
 {
   "general": {
-    "noData:": "No data"
+    "noData": "No data"
   },
   "header": {
     "search": "Search",
     "searchPlaceholder": "Enter your city",
-    "language":{
+    "language": {
       "en":"EN",
       "ua":"UA"
     }
