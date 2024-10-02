@@ -21,7 +21,7 @@ class PlacesService {
     }
   }
 
-  async getPlace(placeId) {
+  async getPlaceLocation(placeId) {
     try {
       const placeUrl =
         env.VITE_NODE_ENV === 'production' ? `${baseUrl}details/json` : '/details-api';
@@ -30,7 +30,7 @@ class PlacesService {
 
       const response = await axios.get(endpoint);
 
-      return response.data;
+      return response.data.result.geometry.location;
     } catch (e) {
       console.log(e.message);
     }
