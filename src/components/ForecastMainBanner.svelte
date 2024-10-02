@@ -1,5 +1,6 @@
 <script>
   import { Spinner } from 'flowbite-svelte';
+  import { t } from 'svelte-i18n';
 
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import getDayPeriod from '../utils/dayPeriod';
@@ -24,7 +25,7 @@
   <div class="pt-2 p-4 md:pt-5 md:px-10 rounded-lg shadow-[0px_5px_15px_rgba(0,0,0,0.35)]">
     <h2 class="flex items-center font-medium text-sm md:text-lg">
       <span class="material-symbols-outlined text-1xl md:text-2xl"> schedule </span>
-      <span class="ml-1">Current conditions</span>
+      <span class="ml-1">{$t('forecastMainBanner.currentConditions')}</span>
     </h2>
 
     {#if isLoading}
@@ -60,7 +61,7 @@
               </span>
               {#if feelsLike !== null}
                 <span class="ml-2 md:ml-4 text-sm md:text-lg">
-                  Feels like
+                  {$t('forecastMainBanner.feelsLike')}
                   <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}>
                     {feelsLike}°
                   </span>
@@ -73,7 +74,7 @@
             <div class="flex mt-2 items-end">
               <span class="material-symbols-outlined text-3xl md:text-4xl"> umbrella </span>
               <span class="ml-2 md:ml-4 text-4xl md:text-5xl text-blue-500"> {precipitation}</span>
-              <span class="ml-1">mm</span>
+              <span class="ml-1">{$t('forecastMainBanner.millimeters')}</span>
             </div>
           {/if}
 
@@ -85,7 +86,7 @@
               </span>
               {#if windGusts !== null}
                 <span class="ml-2 text-sm md:text-lg">
-                  ({windGusts}) m/s
+                  ({windGusts}) {$t('forecastMainBanner.metersPerSecond')}
                 </span>
               {/if}
               <span

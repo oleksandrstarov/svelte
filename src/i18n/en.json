@@ -6,8 +6,14 @@
     "search": "Search",
     "searchPlaceholder": "Enter your city",
     "language": {
-      "en":"EN",
-      "ua":"UA"
+      "en": "EN",
+      "ua": "UA"
     }
+  },
+  "forecastMainBanner": {
+    "currentConditions": "Current conditions",
+    "feelsLike": "Feels like",
+    "millimeters": "mm",
+    "metersPerSecond": "m/s"
   }
 }
