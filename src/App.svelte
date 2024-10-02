@@ -1,9 +1,10 @@
 <script>
+  import { Spinner } from 'flowbite-svelte';
+
   import Router from 'svelte-spa-router';
   import { routes } from './routes';
   import Header from './components/Header.svelte';
   import { isLoading } from 'svelte-i18n';
-  import LoadingSpinner from './components/LoadingSpinner.svelte';
 </script>
 
 <main>
@@ -11,6 +12,8 @@
     <Header />
     <Router {routes} />
   {:else}
-    <LoadingSpinner />
+    <div class="w-screen h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
   {/if}
 </main>
