@@ -2,8 +2,8 @@
   import logo from '/src/assets/svelte.svg';
   import { link, location, push } from 'svelte-spa-router';
   import { Button, Input } from 'flowbite-svelte';
-  import placesService from '../services/PlacesService.js';
-  import { clickOutside } from '../directives/clickOutside.js';
+  import placesService from '../services/placesService';
+  import { clickOutside } from '../directives/clickOutside';
   import { debounce } from 'lodash';
 
   let searchInputContainerRef;
@@ -114,10 +114,10 @@
 
         <div class="absolute mt-1 w-full pr-4 md:pr-10 top bg-white">
           <ul class="shadow-lg rounded-md mt-1 max-h-80 overflow-y-auto">
-            {#each placesAutocomplete as { description, place_id }, i (place_id)}
+            {#each placesAutocomplete as { description, place_id: placeId }, i (placeId)}
               <li
-                class="py-2 px-2 hover:bg-primary-50 cursor-pointer"
-                on:click={() => navigateToForecast(place_id)}
+                class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700"
+                on:click={() => navigateToForecast(placeId)}
               >
                 {description}
               </li>

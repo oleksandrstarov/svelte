@@ -15,7 +15,7 @@
 
         if (!data) {
           weatherData.hasError = true;
-          
+
           return;
         }
 
