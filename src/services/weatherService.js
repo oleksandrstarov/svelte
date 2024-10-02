@@ -14,7 +14,16 @@ class WeatherService {
 
       const response = await axios.get(`${baseUrl}/forecast`, { params });
 
-      return response.data;
+      return {
+        temperature: response.data.current.temperature_2m,
+        feelsLike: response.data.current.apparent_temperature,
+        precipitation: response.data.current.precipitation,
+        weatherCode: response.data.current.weather_code,
+        windSpeed: response.data.current.wind_speed_10m,
+        windGusts: response.data.current.wind_gusts_10m,
+        windDirection: response.data.current.wind_direction_10m,
+        time: response.data.current.time,
+      };
     } catch (error) {
       console.log('Error fetching weather data:', error.message);
       throw error;

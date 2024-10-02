@@ -34,7 +34,7 @@
   };
 
   const updateSearchValue = debounce(async value => {
-    searchValue = value;
+    searchValue = value.trim();
   }, 300);
 
   const getAutocomplete = async value => {

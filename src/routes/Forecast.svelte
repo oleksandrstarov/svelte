@@ -11,7 +11,7 @@
       weatherData.isLoading = true;
       weatherData.hasError = false;
       try {
-        const data = await weatherService.fetchWeatherData(params.latitude, params.longitude);
+        const data = await weatherService.getWeather(params.latitude, params.longitude);
 
         if (!data) {
           weatherData.hasError = true;
@@ -38,4 +38,4 @@
   }
 </script>
 
-<ForecastMainBanner {weatherData} />
+<ForecastMainBanner {...weatherData} />
