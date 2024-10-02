@@ -51,7 +51,7 @@
         {/if}
 
         <div
-          class="forcast-info flex flex-col md:flex-row justify-between items-left basis-1/2 md:basis-3/4"
+          class="flex flex-col md:flex-row justify-between items-left basis-1/2 md:basis-3/4"
         >
           {#if temperature !== null}
             <div class="flex mt-2 items-end">
