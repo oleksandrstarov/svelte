@@ -6,35 +6,40 @@
 
   let weatherData = {};
 
-  $: if (params.latitude && params.longitude) {
-    (async () => {
-      weatherData.isLoading = true;
-      weatherData.hasError = false;
-      try {
-        const data = await weatherService.getWeather(params.latitude, params.longitude);
+  async function fetchWeatherData(latitude, longitude) {
+    weatherData.isLoading = true;
+    weatherData.hasError = false;
 
-        if (!data) {
-          weatherData.hasError = true;
+    try {
+      const data = await weatherService.getWeather(latitude, longitude);
 
-          return;
-        }
-
-        weatherData = {
-          temperature: data.temperature ?? null,
-          feelsLike: data.feelsLike ?? null,
-          precipitation: data.precipitation ?? null,
-          weatherCode: data.weatherCode ?? null,
-          windSpeed: data.windSpeed ?? null,
-          windDirection: data.windDirection ?? null,
-          windGusts: data.windGusts ?? null,
-          time: data.time ?? null,
-        };
-      } catch {
+      if (!data) {
         weatherData.hasError = true;
-      } finally {
-        weatherData.isLoading = false;
+        return;
       }
-    })();
+
+      weatherData = {
+        temperature: data.temperature ?? null,
+        feelsLike: data.feelsLike ?? null,
+        precipitation: data.precipitation ?? null,
+        weatherCode: data.weatherCode ?? null,
+        windSpeed: data.windSpeed ?? null,
+        windDirection: data.windDirection ?? null,
+        windGusts: data.windGusts ?? null,
+        time: data.time ?? null,
+        isLoading: false,
+        hasError: false,
+      };
+    } catch (error) {
+      weatherData.hasError = true;
+      console.error("Error fetching weather data:", error);
+    } finally {
+      weatherData.isLoading = false;
+    }
+  }
+
+  $: if (params.latitude && params.longitude) {
+    fetchWeatherData(params.latitude, params.longitude);
   }
 </script>
 
