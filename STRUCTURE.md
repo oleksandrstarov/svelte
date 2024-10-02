@@ -11,7 +11,8 @@ svelte
 ├── src/
 │ ├── assets/
 │ ├── components/
-│ ├── dirictives/
+│ ├── directives/
+│ ├── utils/
 │ ├── stores/
 │ ├── styles/
 │ ├── services/
@@ -49,7 +50,9 @@ This is where the main application code resides.
   └── Header.svelte
   ```
 
-- **`directives//`**: Contains directives.
+- **`directives/`**: Contains directives.
+
+- **`utils/`**: Contains utility functions.
 
 - **`stores/`**: Contains Svelte stores for managing global state.
 
