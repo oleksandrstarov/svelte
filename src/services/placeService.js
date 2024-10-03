@@ -13,7 +13,9 @@ class PlacesService {
   async getAutocomplete(input) {
     try {
       const formattedInput = input.replace(/ /g, '%');
-      const endpoint = `${this.#getUrl('autocomplete')}&input=${formattedInput}&types=geocode`;
+      const endpoint = `${this.#getUrl(
+        'autocomplete',
+      )}&input=${formattedInput}&types=locality|sublocality`;
 
       const response = await axios.get(endpoint);
 
@@ -44,7 +46,7 @@ class PlacesService {
     try {
       const endpoint = `${this.#getUrl(
         'nearbysearch',
-      )}&location=${latitude},${longitude}&radius=1000&type=political`;
+      )}&location=${latitude},${longitude}&radius=1000`;
 
       const response = await axios.get(endpoint);
 

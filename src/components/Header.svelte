@@ -27,7 +27,7 @@
   $: selectedLang = $locale;
 
   $: {
-    if (!searchValue) {
+    if (!searchValue.trim()) {
       placesAutocomplete = getLocationsHistoryAutocomplete();
       searchInputRef?.focus();
     } else {
@@ -48,13 +48,13 @@
   };
 
   const updateSearchValue = debounce(async value => {
-    searchValue = value.trim();
+    searchValue = value;
   }, 300);
 
   const getAutocomplete = async value => {
     isAutocompleteLoading = true;
 
-    const autocomplete = await placesService.getAutocomplete(value);
+    const autocomplete = await placesService.getAutocomplete(value.trim());
 
     placesAutocomplete = [...autocomplete];
     isAutocompleteLoading = false;
