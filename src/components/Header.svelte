@@ -88,9 +88,9 @@
   const addToHistory = (placeName, placeId, lat, lng) => {
     const locationsHistory = JSON.parse(localStorage.getItem('locationsHistory')) || [];
 
-    const existingIndex = locationsHistory.findIndex(location => location.placeId === placeId);
-    if (existingIndex !== -1) {
-      locationsHistory.splice(existingIndex, 1);
+    const locationIndex = locationsHistory.findIndex(location => location.placeId === placeId);
+    if (locationIndex !== -1) {
+      locationsHistory.splice(locationIndex, 1);
     }
 
     if (locationsHistory.length > 4) {
