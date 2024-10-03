@@ -28,7 +28,7 @@
 
   $: {
     if (!searchValue) {
-      placesAutocomplete = getLocationHistoryAutocomplete();
+      placesAutocomplete = getLocationsHistoryAutocomplete();
       searchInputRef?.focus();
     } else {
       getAutocomplete(searchValue);
@@ -103,7 +103,7 @@
     currentAddress = placeName;
   };
 
-  const getLocationHistoryAutocomplete = () => {
+  const getLocationsHistoryAutocomplete = () => {
     const locationsHistory = localStorage.getItem('locationsHistory');
 
     return (
