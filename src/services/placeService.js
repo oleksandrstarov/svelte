@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { notificationsStore } from '../stores/notification';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
@@ -17,7 +18,7 @@ class PlacesService {
 
       return response.data;
     } catch (e) {
-      console.log(e.message);
+      notificationsStore.addNotification({ message: 'Error fetching place data' + e.message });
     }
   }
 
@@ -32,7 +33,7 @@ class PlacesService {
 
       return response.data.result.geometry.location;
     } catch (e) {
-      console.log(e.message);
+      notificationsStore.addNotification({ message: 'Error fetching place data' + e.message });
     }
   }
 }

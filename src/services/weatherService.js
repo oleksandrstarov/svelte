@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { notificationsStore } from '../stores/notification';
 
 const baseUrl = 'https://api.open-meteo.com/v1';
 
@@ -25,8 +26,9 @@ class WeatherService {
         timeOfDayId: response.data.current.is_day,
       };
     } catch (error) {
-      console.log('Error fetching weather data:', error.message);
-      throw error;
+      notificationsStore.addNotification({
+        message: 'Error fetching weather data: ' + error.message,
+      });
     }
   }
 }
