@@ -13,12 +13,12 @@
     windSpeed,
     windDirection,
     windGusts,
-    time,
+    isDay,
     isLoading,
     hasError,
   } = {};
 
-  $: dayPeriod = getDayPeriod(time);
+  $: dayPeriod = getDayPeriod(isDay);
 </script>
 
 <div class="p-5 md:p-10">
@@ -34,7 +34,7 @@
       </div>
     {:else if hasError}
       <div class="flex justify-center items-center p-4 md: pt-5">
-        <p>No data received</p>
+        <p>{$t('forecastMainBanner.noDataReceived')}</p>
       </div>
     {:else}
       <div class="flex justify-between items-center">
@@ -50,9 +50,7 @@
           </div>
         {/if}
 
-        <div
-          class="flex flex-col md:flex-row justify-between items-left basis-1/2 md:basis-3/4"
-        >
+        <div class="flex flex-col md:flex-row justify-between items-left basis-1/2 md:basis-3/4">
           {#if temperature !== null}
             <div class="flex mt-2 items-end">
               <span class="material-symbols-outlined text-3xl md:text-4xl"> thermostat </span>
@@ -72,7 +70,7 @@
 
           {#if precipitation !== null}
             <div class="flex mt-2 items-end">
-              <span class="material-symbols-outlined text-3xl md:text-4xl"> umbrella </span>
+              <span class="material-symbols-outlined text-3xl md:text-4xl"> water_drop </span>
               <span class="ml-2 md:ml-4 text-4xl md:text-5xl text-blue-500"> {precipitation}</span>
               <span class="ml-1">{$t('forecastMainBanner.millimeters')}</span>
             </div>
@@ -80,7 +78,7 @@
 
           {#if windSpeed !== null}
             <div class="flex mt-2 items-end">
-              <span class="material-symbols-outlined text-2xl md:text-3xl"> air </span>
+              <span class="material-symbols-outlined text-3xl md:text-4xl"> air </span>
               <span class="ml-2 md:ml-4 text-4xl md:text-5xl">
                 {windSpeed}
               </span>

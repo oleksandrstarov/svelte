@@ -10,26 +10,27 @@
     weatherData.isLoading = true;
     weatherData.hasError = false;
 
-      const data = await weatherService.getWeather(latitude, longitude);
+    const data = await weatherService.getWeather(latitude, longitude);
 
-      if (!data) {
-        weatherData.isLoading = false;
-        weatherData.hasError = true;
-        return;
-      }
+    if (!data) {
+      weatherData.isLoading = false;
+      weatherData.hasError = true;
+      
+      return;
+    }
 
-      weatherData = {
-        temperature: data.temperature ?? null,
-        feelsLike: data.feelsLike ?? null,
-        precipitation: data.precipitation ?? null,
-        weatherCode: data.weatherCode ?? null,
-        windSpeed: data.windSpeed ?? null,
-        windDirection: data.windDirection ?? null,
-        windGusts: data.windGusts ?? null,
-        time: data.time ?? null,
-        isLoading: false,
-        hasError: false,
-      };
+    weatherData = {
+      temperature: data.temperature ?? null,
+      feelsLike: data.feelsLike ?? null,
+      precipitation: data.precipitation ?? null,
+      weatherCode: data.weatherCode ?? null,
+      windSpeed: data.windSpeed ?? null,
+      windDirection: data.windDirection ?? null,
+      windGusts: data.windGusts ?? null,
+      isDay: data.isDay ?? null,
+      isLoading: false,
+      hasError: false,
+    };
   }
 
   $: if (params.latitude && params.longitude) {

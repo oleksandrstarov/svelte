@@ -1,8 +1,3 @@
-export default function getDayPeriod(time) {
-  const hours = new Date(time)
-    .getHours();
-  const startOfDay = 6;
-  const endOfDay = 18;
-
-  return hours >= startOfDay && hours < endOfDay ? 'day' : 'night';
+export default function getDayPeriod(id) {
+  return id === 1 ? 'day' : 'night';
 }

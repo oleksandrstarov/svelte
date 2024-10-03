@@ -9,7 +9,7 @@ class WeatherService {
         latitude,
         longitude,
         current:
-          'temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m',
+          'temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day',
       };
 
       const response = await axios.get(`${baseUrl}/forecast`, { params });
@@ -22,7 +22,7 @@ class WeatherService {
         windSpeed: response.data.current.wind_speed_10m,
         windGusts: response.data.current.wind_gusts_10m,
         windDirection: response.data.current.wind_direction_10m,
-        time: response.data.current.time,
+        isDay: response.data.current.is_day,
       };
     } catch (error) {
       console.log('Error fetching weather data:', error.message);

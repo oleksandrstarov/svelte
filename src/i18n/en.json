@@ -14,6 +14,7 @@
     "currentConditions": "Current conditions",
     "feelsLike": "Feels like",
     "millimeters": "mm",
-    "metersPerSecond": "m/s"
+    "metersPerSecond": "m/s",
+    "forecastMainBanner.noDataReceived": "No data received"
   }
 }
