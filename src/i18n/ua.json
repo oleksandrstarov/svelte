@@ -9,5 +9,12 @@
       "en": "АНГЛ",
       "ua": "УКР"
     }
+  },
+  "forecastMainBanner": {
+    "currentConditions": "Погода зараз",
+    "feelsLike": "Відчувається як",
+    "millimeters": "мм",
+    "metersPerSecond": "м/с",
+    "forecastMainBanner.noDataReceived": "Дані не отримані"
   }
 }

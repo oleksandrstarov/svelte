@@ -2,7 +2,7 @@
   import logo from '/src/assets/svelte.svg';
   import { link, location, push, params } from 'svelte-spa-router';
   import { Button, Input, Select } from 'flowbite-svelte';
-  import placesService from '../services/placesService';
+  import placesService from '../services/placeService';
   import { clickOutside } from '../directives/clickOutside';
   import { debounce } from 'lodash';
   import { t, locale } from 'svelte-i18n';
