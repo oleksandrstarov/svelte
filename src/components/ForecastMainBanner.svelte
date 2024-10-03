@@ -39,7 +39,7 @@
     {:else}
       <div class="flex justify-between items-center">
         {#if weatherCode !== null && weatherCodes[weatherCode]?.[dayPeriod]?.image}
-          <div class="basis-1/2 md:basis-1/4">
+          <div class="basis-1/2 md:basis-1/4 flex flex-col">
             <span>
               <img
                 class="min-h-24 h-24 md:h-32"
@@ -47,14 +47,27 @@
                 alt="weather"
               />
             </span>
+            {#if temperature !== null}
+              <span
+                class={`text-4xl md:text-5xl text-${
+                  temperature >= 0 ? 'red' : 'blue'
+                }-500 md:hidden m-3`}
+              >
+                {temperature}°
+              </span>
+            {/if}
           </div>
         {/if}
 
-        <div class="flex flex-col md:flex-row justify-between items-left basis-1/2 md:basis-3/4">
+        <div class="flex flex-col md:flex-row justify-between basis-1/2 md:basis-3/4">
           {#if temperature !== null}
-            <div class="flex mt-2 items-end">
+            <div class="flex mt-2 items-center md:items-end">
               <span class="material-symbols-outlined text-3xl md:text-4xl"> thermostat </span>
-              <span class={`text-4xl md:text-5xl text-${temperature >= 0 ? 'red' : 'blue'}-500`}>
+              <span
+                class={`text-4xl md:text-5xl text-${
+                  temperature >= 0 ? 'red' : 'blue'
+                }-500 hidden md:block`}
+              >
                 {temperature}°
               </span>
               {#if feelsLike !== null}
@@ -69,7 +82,7 @@
           {/if}
 
           {#if precipitation !== null}
-            <div class="flex mt-2 items-end">
+            <div class="flex mt-2 items-center md:items-end">
               <span class="material-symbols-outlined text-3xl md:text-4xl"> water_drop </span>
               <span class="ml-2 md:ml-4 text-4xl md:text-5xl text-blue-500"> {precipitation}</span>
               <span class="ml-1">{$t('forecastMainBanner.millimeters')}</span>
@@ -77,7 +90,7 @@
           {/if}
 
           {#if windSpeed !== null}
-            <div class="flex mt-2 items-end">
+            <div class="flex mt-2 items-center md:items-end">
               <span class="material-symbols-outlined text-3xl md:text-4xl"> air </span>
               <span class="ml-2 md:ml-4 text-4xl md:text-5xl">
                 {windSpeed}
