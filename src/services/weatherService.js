@@ -22,7 +22,7 @@ class WeatherService {
         windSpeed: response.data.current.wind_speed_10m,
         windGusts: response.data.current.wind_gusts_10m,
         windDirection: response.data.current.wind_direction_10m,
-        isDay: response.data.current.is_day,
+        timeOfDayId: response.data.current.is_day,
       };
     } catch (error) {
       console.log('Error fetching weather data:', error.message);

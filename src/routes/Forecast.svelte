@@ -27,7 +27,7 @@
       windSpeed: data.windSpeed ?? null,
       windDirection: data.windDirection ?? null,
       windGusts: data.windGusts ?? null,
-      isDay: data.isDay ?? null,
+      timeOfDayId: data.timeOfDayId ?? null,
       isLoading: false,
       hasError: false,
     };

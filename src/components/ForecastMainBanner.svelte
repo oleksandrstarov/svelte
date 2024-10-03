@@ -13,12 +13,12 @@
     windSpeed,
     windDirection,
     windGusts,
-    isDay,
+    timeOfDayId,
     isLoading,
     hasError,
   } = {};
 
-  $: dayPeriod = getDayPeriod(isDay);
+  $: dayPeriod = getDayPeriod(timeOfDayId);
 </script>
 
 <div class="p-5 md:p-10">
