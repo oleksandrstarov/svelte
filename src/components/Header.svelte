@@ -1,6 +1,6 @@
 <script>
   import logo from '/src/assets/svelte.svg';
-  import { link, location, push } from 'svelte-spa-router';
+  import { link, location, push, params } from 'svelte-spa-router';
   import { Button, Input, Select } from 'flowbite-svelte';
   import placesService from '../services/placesService';
   import { clickOutside } from '../directives/clickOutside';
@@ -11,7 +11,6 @@
     { value: 'en-US', name: $t('header.language.en') },
     { value: 'ua-UA', name: $t('header.language.ua') },
   ];
-  const dummyCity = 'Ukraine, Kyiv, elevation 199m'; // TODO replace dummyCity once favorite places ready
 
   let searchInputContainerRef;
 
@@ -19,6 +18,7 @@
   let placesAutocomplete = [];
   let isSearchButton = true;
   let isAutocompleteLoading = false;
+  let currentAddress = '';
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
@@ -28,10 +28,17 @@
 
   $: {
     if (!searchValue) {
-      placesAutocomplete = [];
+      placesAutocomplete = getLocationHistoryAutocomplete();
       searchInputRef?.focus();
     } else {
       getAutocomplete(searchValue);
+    }
+  }
+  $: {
+    if ($params) {
+      getAddress($params.latitude, $params.longitude);
+    } else {
+      currentAddress = '';
     }
   }
 
@@ -47,23 +54,63 @@
   const getAutocomplete = async value => {
     isAutocompleteLoading = true;
 
-    const { predictions } = await placesService.getAutocomplete(value);
+    const autocomplete = await placesService.getAutocomplete(value);
 
-    placesAutocomplete = [...predictions];
+    placesAutocomplete = [...autocomplete];
     isAutocompleteLoading = false;
   };
 
-  const navigateToForecast = async placeId => {
-    const { lat, lng } = await placesService.getPlaceLocation(placeId);
+  const navigateToForecast = async (placeId, placeName) => {
+    const {
+      location: { lat, lng },
+    } = await placesService.getDetails(placeId);
 
+    addToHistory(placeName, placeId, lat, lng);
     toggleIsSearchButton();
     push(`/forecast/${lat}/${lng}`);
   };
 
+  const getAddress = async (latitude, longitude) => {
+    if (currentAddress) {
+      return;
+    }
+    const placeId = await placesService.getId(latitude, longitude);
+    const { address } = await placesService.getDetails(placeId);
+    currentAddress = address;
+  };
+
   const onKeydown = e => {
     if (e.key === 'Enter' && placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['place_id']);
+      navigateToForecast(placesAutocomplete[0]['placeId'], placesAutocomplete[0]['placeName']);
     }
+  };
+
+  const addToHistory = (placeName, placeId, lat, lng) => {
+    const locationsHistory = JSON.parse(localStorage.getItem('locationsHistory')) || [];
+
+    const existingIndex = locationsHistory.findIndex(location => location.placeId === placeId);
+    if (existingIndex !== -1) {
+      locationsHistory.splice(existingIndex, 1);
+    }
+
+    if (locationsHistory.length > 4) {
+      locationsHistory.shift();
+    }
+
+    locationsHistory.push({ placeName, placeId, lat, lng });
+
+    localStorage.setItem('locationsHistory', JSON.stringify(locationsHistory));
+    currentAddress = placeName;
+  };
+
+  const getLocationHistoryAutocomplete = () => {
+    const locationsHistory = localStorage.getItem('locationsHistory');
+
+    return (
+      JSON.parse(locationsHistory)
+        ?.reverse()
+        .map(({ placeId, placeName }) => ({ placeId, placeName })) || []
+    );
   };
 </script>
 
@@ -77,7 +124,7 @@
     {#if !isSearchPage && isSearchButton}
       <div class="flex flex-col ml-3">
         <h1 class="text-xl">Svelte</h1>
-        <span class="text-sm pr-2">{dummyCity}</span>
+        <span class="text-sm pr-2">{currentAddress}</span>
       </div>
     {/if}
   </div>
@@ -130,12 +177,12 @@
 
         <div class="absolute mt-1 w-full pr-4 md:pr-10 top bg-white">
           <ul class="shadow-lg rounded-md mt-1 max-h-80 overflow-y-auto">
-            {#each placesAutocomplete as { description, place_id: placeId }, i (placeId)}
+            {#each placesAutocomplete as { placeName, placeId }, i (placeId)}
               <li
                 class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700"
-                on:click={() => navigateToForecast(placeId)}
+                on:click={() => navigateToForecast(placeId, placeName)}
               >
-                {description}
+                {placeName}
               </li>
               {#if i !== placesAutocomplete.length - 1}
                 <hr />
