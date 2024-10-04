@@ -16,5 +16,14 @@
     "millimeters": "мм",
     "metersPerSecond": "м/с",
     "forecastMainBanner.noDataReceived": "Дані не отримані"
+  },
+  "weeklyForecast": {
+    "weather": "Погода",
+    "temperature": "Температура макс/мін",
+    "precipitation": "Осадки",
+    "wind": "Вітер",
+    "openHourlyForecast": "Відкрити погодинний прогноз",
+    "kilometersPerHour": "км/г",
+    "millimeters": "мм"
   }
 }

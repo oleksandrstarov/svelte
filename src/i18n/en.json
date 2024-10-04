@@ -16,5 +16,14 @@
     "millimeters": "mm",
     "metersPerSecond": "m/s",
     "forecastMainBanner.noDataReceived": "No data received"
+  },
+  "weeklyForecast": {
+    "weather": "Weather",
+    "temperature": "Temperature max/min",
+    "precipitation": "Precipitation",
+    "wind": "Wind",
+    "openHourlyForecast": "Open hourly forecast",
+    "kilometersPerHour": "km/h",
+    "millimeters": "mm"
   }
 }

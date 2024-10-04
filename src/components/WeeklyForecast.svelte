@@ -1,0 +1,159 @@
+<script>
+  import weatherService from '../services/weatherService';
+  import {
+    Table,
+    TableBody,
+    TableBodyCell,
+    TableBodyRow,
+    TableHead,
+    TableHeadCell,
+  } from 'flowbite-svelte';
+  import moment from 'moment';
+  import { link } from 'svelte-spa-router';
+  import weatherCodes from '../assets/weather-interpretation-code-description.json';
+  import { t } from 'svelte-i18n';
+
+  export let latitude;
+  export let longitude;
+
+  const weatherData = {
+    isLoading: false,
+    hasError: false,
+  };
+  let forecastData = [];
+  const routeBase = '/details';
+
+  function formatDate(dateString) {
+    return moment(dateString)
+      .format('dddd DD MMM');
+  }
+
+  async function fetchWeatherData(latitude, longitude) {
+    weatherData.isLoading = true;
+    weatherData.hasError = false;
+
+    try {
+      const response = await weatherService.getWeeklyForecast(latitude, longitude);
+      if (!response) {
+        weatherData.isLoading = false;
+        weatherData.hasError = true;
+        
+        return;
+      }
+
+      const dailyData = response.daily;
+
+      forecastData = dailyData.time?.map((time, i) => ({
+        date: formatDate(time),
+        rawDate: time,
+        maxTemp: dailyData.temperature_2m_max[i],
+        minTemp: dailyData.temperature_2m_min[i],
+        precipitation: dailyData.precipitation_sum[i],
+        windSpeed: dailyData.wind_speed_10m_max[i],
+        weatherCode: dailyData.weather_code[i],
+      }));
+
+      weatherData.isLoading = false;
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      weatherData.isLoading = false;
+      weatherData.hasError = true;
+    }
+  }
+
+  $: if (latitude && longitude) {
+    fetchWeatherData(latitude, longitude);
+  }
+</script>
+
+<div class="p-5 md:p-10">
+  {#if weatherData.isLoading}
+    <div>{$t('loading')}</div>
+  {:else if weatherData.hasError}
+    <div>{$t('errorLoadingData')}</div>
+  {:else}
+    <div class="block md:hidden">
+      <div class="grid grid-cols-1 gap-4">
+        {#each forecastData as day}
+          <div class="bg-white shadow-md rounded-md p-4 flex flex-col items-center">
+            <div class="text-center font-bold">{day.date}</div>
+            {#if day.weatherCode !== null && weatherCodes[day.weatherCode]?.['day']?.image}
+              <img
+                class="w-16 h-16 object-cover"
+                src={weatherCodes[day.weatherCode]['day'].image}
+                alt="weather"
+              />
+            {/if}
+            <div class="text-lg">
+              <span class={`text-${day.maxTemp >= 0 ? 'red' : 'blue'}-500`}>{day.maxTemp}°C</span>
+              /
+              <span class={`text-${day.minTemp >= 0 ? 'red' : 'blue'}-500`}>{day.minTemp}°C</span>
+            </div>
+            <div class="text-sm">
+              <span class="text-blue-500"
+                >{day.precipitation} {$t('weeklyForecast.millimeters')}</span
+              >
+              |
+              <span>{day.windSpeed} {$t('weeklyForecast.kilometersPerHour')}</span>
+            </div>
+            <a
+              href={`${routeBase}/${day.rawDate}`}
+              use:link
+              class="text-blue-500 hover:underline mt-2"
+            >
+              {$t('weeklyForecast.openHourlyForecast')}
+            </a>
+          </div>
+        {/each}
+      </div>
+    </div>
+
+    <div class="hidden md:block">
+      <Table shadow hoverable={true}>
+        <TableHead>
+          <TableHeadCell>{$t('weeklyForecast.date')}</TableHeadCell>
+          <TableHeadCell class="hidden md:table-cell">{$t('weeklyForecast.weather')}</TableHeadCell>
+          <TableHeadCell>{$t('weeklyForecast.temperature')}</TableHeadCell>
+          <TableHeadCell class="hidden md:table-cell"
+            >{$t('weeklyForecast.precipitation')}</TableHeadCell
+          >
+          <TableHeadCell class="hidden md:table-cell">{$t('weeklyForecast.wind')}</TableHeadCell>
+          <TableHeadCell></TableHeadCell>
+        </TableHead>
+        <TableBody tableBodyClass="divide-y">
+          {#each forecastData as { date, weatherCode, maxTemp, minTemp, precipitation, windSpeed, rawDate }}
+            <TableBodyRow>
+              <TableBodyCell>{date}</TableBodyCell>
+              <TableBodyCell class="hidden md:table-cell">
+                {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}
+                  <img
+                    class="w-12 h-12 object-cover"
+                    src={weatherCodes[weatherCode]['day'].image}
+                    alt="weather"
+                  />
+                {/if}
+              </TableBodyCell>
+              <TableBodyCell>
+                <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}>{maxTemp}°C</span> /
+                <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}>{minTemp}°C</span>
+              </TableBodyCell>
+              <TableBodyCell class="hidden md:table-cell text-blue-500">
+                {precipitation}
+                {$t('weeklyForecast.millimeters')}
+              </TableBodyCell>
+              <TableBodyCell class="hidden md:table-cell">
+                {windSpeed}
+                {$t('weeklyForecast.kilometersPerHour')}
+              </TableBodyCell>
+              <TableBodyCell>
+                <a href={`${routeBase}/${latitude}/${longitude}${rawDate}`} use:link
+                  >{$t('weeklyForecast.openHourlyForecast')}</a
+                >
+              </TableBodyCell>
+            </TableBodyRow>
+          {/each}
+        </TableBody>
+      </Table>
+    </div>
+  {/if}
+</div>
