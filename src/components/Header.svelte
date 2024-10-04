@@ -61,9 +61,38 @@
   };
 
   const onKeydown = e => {
-    if (e.key === 'Enter' && placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['place_id']);
+    if (e.key !== 'Enter') {
+      return;
     }
+
+    if (placesAutocomplete.length) {
+      navigateToForecast(placesAutocomplete[0]['place_id']);
+
+      return;
+    }
+
+    navigateToBrowserLocation();
+  };
+
+  const navigateToBrowserLocation = () => {
+    // TODO add notifications instead of logs once it merged
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          push(`/forecast/${latitude}/${longitude}`);
+        },
+        error => {
+          console.log($t('errors.getBrowserLocation'));
+          console.error(error);
+        },
+      );
+
+      return;
+    }
+
+    console.log($t('errors.geolocationNotSupported'));
   };
 </script>
 
@@ -137,10 +166,16 @@
               >
                 {description}
               </li>
-              {#if i !== placesAutocomplete.length - 1}
-                <hr />
-              {/if}
+              <hr />
             {/each}
+            <li
+              on:click={navigateToBrowserLocation}
+              class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700
+              text-md font-bold text-primary-700 flex items-center"
+            >
+              <span class="material-symbols-outlined pr-2"> near_me </span>
+              {$t('header.nearby')}
+            </li>
             {#if isNoData}
               <li class="py-2 px-2 text-center">{$t('general.noData')}</li>
             {/if}

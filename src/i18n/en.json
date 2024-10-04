@@ -5,6 +5,7 @@
   "header": {
     "search": "Search",
     "searchPlaceholder": "Enter your city",
+    "nearby": "Nearby",
     "language": {
       "en": "EN",
       "ua": "UA"
@@ -16,5 +17,9 @@
     "millimeters": "mm",
     "metersPerSecond": "m/s",
     "forecastMainBanner.noDataReceived": "No data received"
+  },
+  "errors": {
+    "getBrowserLocation": "Error getting location",
+    "geolocationNotSupported": "Geolocation is not supported by browser"
   }
 }
