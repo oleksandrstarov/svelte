@@ -1,4 +1,4 @@
-import axios from '../utils/cachedAxiosInstanse';
+import axios from '../utils/cachedAxios';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
