@@ -19,7 +19,7 @@
     "forecastMainBanner.noDataReceived": "No data received"
   },
   "errors": {
-    "getBrowserLocation": "Error getting location",
+    "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
     "geolocationNotSupported": "Geolocation is not supported by browser"
   }
 }

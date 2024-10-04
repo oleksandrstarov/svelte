@@ -19,6 +19,7 @@
   let placesAutocomplete = [];
   let isSearchButton = true;
   let isAutocompleteLoading = false;
+  let isNearbyEnabled = true;
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
@@ -76,7 +77,11 @@
 
   const navigateToBrowserLocation = () => {
     // TODO add notifications instead of logs once it merged
+    if (!isNearbyEnabled) {
+      console.log($t('errors.getBrowserLocation'));
 
+      return;
+    }
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -84,6 +89,7 @@
           push(`/forecast/${latitude}/${longitude}`);
         },
         error => {
+          isNearbyEnabled = false;
           console.log($t('errors.getBrowserLocation'));
           console.error(error);
         },
@@ -92,6 +98,7 @@
       return;
     }
 
+    isNearbyEnabled = false;
     console.log($t('errors.geolocationNotSupported'));
   };
 </script>
@@ -168,10 +175,13 @@
               </li>
               <hr />
             {/each}
+
             <li
               on:click={navigateToBrowserLocation}
-              class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700
-              text-md font-bold text-primary-700 flex items-center"
+              class="py-2 px-2 text-md font-bold flex items-center
+              {isNearbyEnabled
+                ? 'text-primary-700 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700'
+                : 'hover:gray-300 first:bg-gray-200 cursor-not-allowed text-gray-500 first:border-l-0'}"
             >
               <span class="material-symbols-outlined pr-2"> near_me </span>
               {$t('header.nearby')}
