@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-function createNotifications() {
+function defineNotificationStore() {
   const { subscribe, update } = writable({ notifications: [] });
 
   const closeNotification = id => {
@@ -16,7 +16,7 @@ function createNotifications() {
         prevState.notifications.splice(notificationIndex, 1);
       }
 
-      return { ...prevState, notifications: [...prevState.notifications] };
+      return { ...prevState };
     });
   };
 
@@ -88,4 +88,4 @@ export const NOTIFICATION_TYPE = {
   Error: 'error',
 };
 
-export const notificationsStore = createNotifications();
+export const notificationsStore = defineNotificationStore();

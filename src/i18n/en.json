@@ -18,7 +18,8 @@
     "forecastMainBanner.noDataReceived": "No data received"
   },
   "errors": {
-    "placeData": "Error fetching place data",
+    "getDetails": "Error fetching details data",
+    "getAutocomplete": "Error fetching autocomplete data",
     "weatherData": "Error fetching weather data"
   }
 }

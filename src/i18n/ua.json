@@ -18,7 +18,8 @@
     "forecastMainBanner.noDataReceived": "Дані не отримані"
   },
   "errors": {
-    "placeData": "Помилка отримання даних про місце",
+    "getDetails": "Помилка отримання даних про місце",
+    "getAutocomplete": "Помилка отримання даних aвтодоповнення",
     "weatherData": "Помилка отримання даних про погоду"
   }
 }

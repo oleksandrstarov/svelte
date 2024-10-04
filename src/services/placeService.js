@@ -21,8 +21,9 @@ class PlacesService {
       return response.data;
     } catch (e) {
       notificationsStore.addNotification({
-        message: `${get(t)('errors.placeData')}: ${e.message}`,
+        message: `${get(t)('errors.getAutocomplete')}`,
       });
+      console.error(e.message);
     }
   }
 
@@ -38,8 +39,9 @@ class PlacesService {
       return response.data.result.geometry.location;
     } catch (e) {
       notificationsStore.addNotification({
-        message: `${get(t)('errors.placeData')}: ${e.message}`,
+        message: `${get(t)('errors.getDetails')}`,
       });
+      console.error(e.message);
     }
   }
 }
