@@ -32,12 +32,11 @@
     weatherData.isLoading = true;
     weatherData.hasError = false;
 
-    try {
       const response = await weatherService.getWeeklyForecast(latitude, longitude);
       if (!response) {
         weatherData.isLoading = false;
         weatherData.hasError = true;
-        
+
         return;
       }
 
@@ -54,11 +53,6 @@
       }));
 
       weatherData.isLoading = false;
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      weatherData.isLoading = false;
-      weatherData.hasError = true;
-    }
   }
 
   $: if (latitude && longitude) {
