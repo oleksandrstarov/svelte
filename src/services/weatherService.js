@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { notificationsStore } from '../stores/notification';
+import { get } from 'svelte/store';
+import { t } from 'svelte-i18n';
 
 const baseUrl = 'https://api.open-meteo.com/v1';
 
@@ -25,9 +27,9 @@ class WeatherService {
         windDirection: response.data.current.wind_direction_10m,
         timeOfDayId: response.data.current.is_day,
       };
-    } catch (error) {
+    } catch (e) {
       notificationsStore.addNotification({
-        message: 'Error fetching weather data: ' + error.message,
+        message: `${get(t)('errors.weatherData')}: ${e.message}`,
       });
     }
   }

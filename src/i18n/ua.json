@@ -16,5 +16,9 @@
     "millimeters": "мм",
     "metersPerSecond": "м/с",
     "forecastMainBanner.noDataReceived": "Дані не отримані"
+  },
+  "errors": {
+    "placeData": "Помилка отримання даних про місце",
+    "weatherData": "Помилка отримання даних про погоду"
   }
 }

@@ -16,5 +16,9 @@
     "millimeters": "mm",
     "metersPerSecond": "m/s",
     "forecastMainBanner.noDataReceived": "No data received"
+  },
+  "errors": {
+    "placeData": "Error fetching place data",
+    "weatherData": "Error fetching weather data"
   }
 }

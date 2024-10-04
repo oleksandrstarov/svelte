@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { notificationsStore } from '../stores/notification';
+import { t } from 'svelte-i18n';
+import { get } from 'svelte/store';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
@@ -18,7 +20,9 @@ class PlacesService {
 
       return response.data;
     } catch (e) {
-      notificationsStore.addNotification({ message: 'Error fetching place data' + e.message });
+      notificationsStore.addNotification({
+        message: `${get(t)('errors.placeData')}: ${e.message}`,
+      });
     }
   }
 
@@ -33,7 +37,9 @@ class PlacesService {
 
       return response.data.result.geometry.location;
     } catch (e) {
-      notificationsStore.addNotification({ message: 'Error fetching place data' + e.message });
+      notificationsStore.addNotification({
+        message: `${get(t)('errors.placeData')}: ${e.message}`,
+      });
     }
   }
 }
