@@ -29,7 +29,7 @@ class WeatherService {
       };
     } catch (e) {
       notificationsStore.addNotification({
-        message: `${get(t)('errors.weatherData')}`,
+        message: `${get(t)('errors.getWeather')}`,
       });
       console.error(e.message);
     }
