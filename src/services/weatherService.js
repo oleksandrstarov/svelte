@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../utils/cachedAxiosInstanse';
 
 const baseUrl = 'https://api.open-meteo.com/v1';
 
