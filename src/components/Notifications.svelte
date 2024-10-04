@@ -12,7 +12,7 @@
   <div class="absolute bottom-0 left-0 pl-2 pb-2 w-full">
     {#each notifications as { id, message, icon, color, count } (id)}
       <Toast
-        class="relative border-2"
+        class="relative border-2 my-1 shadow-neutral-50"
         {color}
         transition={() => 0}
         on:close={() => closeNotification(id)}
