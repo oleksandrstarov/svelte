@@ -85,6 +85,7 @@ export const NOTIFICATION_TYPE = {
   Info: 'info',
   Positive: 'positive',
   Warning: 'warning',
+  Error: 'error',
 };
 
 export const notificationsStore = createNotifications();
