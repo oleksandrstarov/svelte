@@ -46,7 +46,11 @@ class PlacesService {
         address: response.data.result.formatted_address,
       };
     } catch (e) {
-      console.log(e.message);
+      notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
+        message: `${get(t)('errors.getDetails')}`,
+      });
+      console.error(e.message);
     }
   }
   async getId(latitude, longitude) {
