@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { notificationsStore } from '../stores/notification';
+import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 
@@ -21,6 +21,7 @@ class PlacesService {
       return response.data;
     } catch (e) {
       notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
         message: `${get(t)('errors.getAutocomplete')}`,
       });
       console.error(e.message);
@@ -39,6 +40,7 @@ class PlacesService {
       return response.data.result.geometry.location;
     } catch (e) {
       notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
         message: `${get(t)('errors.getDetails')}`,
       });
       console.error(e.message);

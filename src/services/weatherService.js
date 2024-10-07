@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { notificationsStore } from '../stores/notification';
+import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 import { get } from 'svelte/store';
 import { t } from 'svelte-i18n';
 
@@ -29,6 +29,7 @@ class WeatherService {
       };
     } catch (e) {
       notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
         message: `${get(t)('errors.getWeather')}`,
       });
       console.error(e.message);
