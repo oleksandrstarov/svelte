@@ -1,6 +1,7 @@
 <script>
   import ForecastMainBanner from '../components/ForecastMainBanner.svelte';
   import weatherService from '../services/weatherService';
+  import WeeklyForecast from '../components/WeeklyForecast.svelte';
 
   export let params;
 
@@ -39,3 +40,4 @@
 </script>
 
 <ForecastMainBanner {...weatherData} />
+<WeeklyForecast latitude={params.latitude} longitude={params.longitude} />
