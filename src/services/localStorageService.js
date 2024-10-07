@@ -1,10 +1,19 @@
-export const addToHistory = (placeName, placeId, lat, lng) => {
+export const removeFromHistory = placeId => {
   const locationsHistory = JSON.parse(localStorage.getItem('locationsHistory')) || [];
   const locationIndex = locationsHistory.findIndex(location => location.placeId === placeId);
 
-  if (locationIndex !== -1) {
-    locationsHistory.splice(locationIndex, 1);
+  if (locationIndex === -1) {
+    return;
   }
+
+  locationsHistory.splice(locationIndex, 1);
+  localStorage.setItem('locationsHistory', JSON.stringify(locationsHistory));
+};
+
+export const addToHistory = ({ placeName, placeId, lat, lng }) => {
+  removeFromHistory(placeId);
+
+  const locationsHistory = JSON.parse(localStorage.getItem('locationsHistory')) || [];
 
   if (locationsHistory.length > 4) {
     locationsHistory.shift();
