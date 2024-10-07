@@ -22,7 +22,7 @@
     "getDetails": "Error fetching details data",
     "getAutocomplete": "Error fetching autocomplete data",
     "getWeather": "Error fetching weather data",
-    "getWeaklyForecast": "Error fetching weakly forecast data",
+    "getWeeklyForecast": "Error fetching weekly forecast data",
     "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
     "geolocationNotSupported": "Geolocation is not supported by browser"
   },

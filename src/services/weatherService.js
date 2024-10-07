@@ -53,7 +53,7 @@ class WeatherService {
     } catch (e) {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
-        message: `${get(t)('errors.getWeaklyForecast')}`,
+        message: `${get(t)('errors.getWeeklyForecast')}`,
       });
       console.error(e.message);
     }
