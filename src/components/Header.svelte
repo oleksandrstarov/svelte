@@ -87,6 +87,7 @@
         position => {
           const { latitude, longitude } = position.coords;
           push(`/forecast/${latitude}/${longitude}`);
+          isSearchButton = true;
         },
         error => {
           isNearbyEnabled = false;
