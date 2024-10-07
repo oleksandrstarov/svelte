@@ -16,5 +16,10 @@
     "millimeters": "mm",
     "metersPerSecond": "m/s",
     "forecastMainBanner.noDataReceived": "No data received"
+  },
+  "errors": {
+    "getDetails": "Error fetching details data",
+    "getAutocomplete": "Error fetching autocomplete data",
+    "getWeather": "Error fetching weather data"
   }
 }
