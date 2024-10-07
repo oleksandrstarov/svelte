@@ -5,6 +5,6 @@ import Details from './Details.svelte';
 export const routes = {
   '/': Search,
   '/forecast/:latitude/:longitude': Forecast,
-  '/details/:latitude/:longitude': Details,
+  '/details/:latitude/:longitude/:date': Details,
   '*': Search,
 };

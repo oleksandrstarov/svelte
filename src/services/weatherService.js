@@ -35,6 +35,29 @@ class WeatherService {
       console.error(e.message);
     }
   }
+
+  async getWeeklyForecast(latitude, longitude) {
+    try {
+      const params = {
+        latitude,
+        longitude,
+        daily:
+          'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
+      };
+
+      const response = await axios.get(`${baseUrl}/forecast`, { params });
+
+      return {
+        daily: response.data.daily,
+      };
+    } catch (e) {
+      notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
+        message: `${get(t)('errors.getWeeklyForecast')}`,
+      });
+      console.error(e.message);
+    }
+  }
 }
 
 const weatherService = new WeatherService();
