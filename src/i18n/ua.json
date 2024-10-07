@@ -5,6 +5,7 @@
   "header": {
     "search": "Пошук",
     "searchPlaceholder": "Введіть ваше місто",
+    "nearby": "Поруч",
     "language": {
       "en": "АНГЛ",
       "ua": "УКР"
@@ -16,6 +17,13 @@
     "millimeters": "мм",
     "metersPerSecond": "м/с",
     "forecastMainBanner.noDataReceived": "Дані не отримані"
+  },
+  "errors": {
+    "getDetails": "Помилка отримання даних про місце",
+    "getAutocomplete": "Помилка отримання даних aвтодоповнення",
+    "getWeather": "Помилка отримання даних про погоду",
+    "getBrowserLocation": "Помилка отримання місцезнаходження. Будь ласка перевірте чи увімкнена геолокація і перезавантажте сторінку",
+    "geolocationNotSupported": "Геолокація не підтримується цим браузером"
   },
   "weeklyForecast": {
     "weather": "Погода",

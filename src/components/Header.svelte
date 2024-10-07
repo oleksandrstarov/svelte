@@ -19,6 +19,7 @@
   let placesAutocomplete = [];
   let isSearchButton = true;
   let isAutocompleteLoading = false;
+  let isNearbyEnabled = true;
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
@@ -61,9 +62,45 @@
   };
 
   const onKeydown = e => {
-    if (e.key === 'Enter' && placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['place_id']);
+    if (e.key !== 'Enter') {
+      return;
     }
+
+    if (placesAutocomplete.length) {
+      navigateToForecast(placesAutocomplete[0]['place_id']);
+
+      return;
+    }
+
+    navigateToBrowserLocation();
+  };
+
+  const navigateToBrowserLocation = () => {
+    // TODO add notifications instead of logs once it merged
+    if (!isNearbyEnabled) {
+      console.log($t('errors.getBrowserLocation'));
+
+      return;
+    }
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          push(`/forecast/${latitude}/${longitude}`);
+          isSearchButton = true;
+        },
+        error => {
+          isNearbyEnabled = false;
+          console.log($t('errors.getBrowserLocation'));
+          console.error(error);
+        },
+      );
+
+      return;
+    }
+
+    isNearbyEnabled = false;
+    console.log($t('errors.geolocationNotSupported'));
   };
 </script>
 
@@ -137,10 +174,19 @@
               >
                 {description}
               </li>
-              {#if i !== placesAutocomplete.length - 1}
-                <hr />
-              {/if}
+              <hr />
             {/each}
+
+            <li
+              on:click={navigateToBrowserLocation}
+              class="py-2 px-2 text-md font-bold flex items-center
+              {isNearbyEnabled
+                ? 'text-primary-700 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700'
+                : 'hover:gray-300 first:bg-gray-200 cursor-not-allowed text-gray-500 first:border-l-0'}"
+            >
+              <span class="material-symbols-outlined pr-2"> near_me </span>
+              {$t('header.nearby')}
+            </li>
             {#if isNoData}
               <li class="py-2 px-2 text-center">{$t('general.noData')}</li>
             {/if}

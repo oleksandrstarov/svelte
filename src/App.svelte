@@ -5,12 +5,14 @@
   import { routes } from './routes';
   import Header from './components/Header.svelte';
   import { isLoading } from 'svelte-i18n';
+  import Notifications from './components/Notifications.svelte';
 </script>
 
 <main>
   {#if !$isLoading}
     <Header />
     <Router {routes} />
+    <Notifications />
   {:else}
     <div class="w-screen h-screen flex justify-center items-center">
       <Spinner />
