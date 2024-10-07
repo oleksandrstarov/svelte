@@ -5,6 +5,7 @@
   "header": {
     "search": "Search",
     "searchPlaceholder": "Enter your city",
+    "nearby": "Nearby",
     "language": {
       "en": "EN",
       "ua": "UA"
@@ -20,6 +21,8 @@
   "errors": {
     "getDetails": "Error fetching details data",
     "getAutocomplete": "Error fetching autocomplete data",
-    "getWeather": "Error fetching weather data"
+    "getWeather": "Error fetching weather data",
+    "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
+    "geolocationNotSupported": "Geolocation is not supported by browser"
   }
 }
