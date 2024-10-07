@@ -96,7 +96,7 @@
     }
 
     if (placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['place_id'], placesAutocomplete[0]['placeName']);
+      navigateToForecast(placesAutocomplete[0]['placeId'], placesAutocomplete[0]['placeName']);
 
       return;
     }
