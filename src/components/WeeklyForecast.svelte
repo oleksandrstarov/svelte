@@ -8,7 +8,7 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import moment from 'moment';
+  import { DateTime } from 'luxon';
   import { link } from 'svelte-spa-router';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { t } from 'svelte-i18n';
@@ -24,8 +24,8 @@
   const detailsRoute = '/details';
 
   function formatDate(dateString) {
-    return moment(dateString)
-      .format('dddd DD MMM');
+    return DateTime.fromISO(dateString)
+      .toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
