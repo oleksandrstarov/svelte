@@ -26,7 +26,6 @@ export default [
       import: importPlugin,
     },
     rules: {
-      indent: ['error', 2], // enforce consistent indentation
       quotes: ['error', 'single'],
       semi: 'warn', // semicolon
       complexity: 'warn', // Limit Cyclomatic Complexity
