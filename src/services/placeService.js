@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
+import axios from '../utils/cachedAxios';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
