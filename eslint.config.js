@@ -69,7 +69,6 @@ export default [
       'comma-dangle': ['error', 'only-multiline'], // require or disallow trailing commas
       'object-curly-spacing': ['error', 'always'], // enforce consistent spacing inside braces
       'arrow-parens': ['error', 'as-needed'], // Require parens in arrow function arguments
-      'newline-per-chained-call': [2, { ignoreChainWithDepth: 1 }], // require a newline after each call in a method chain
       'array-element-newline': [
         'error',
         {

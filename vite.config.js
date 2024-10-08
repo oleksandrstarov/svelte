@@ -5,15 +5,10 @@ export default defineConfig({
   plugins: [svelte()],
   server: {
     proxy: {
-      '/autocomplete-api': {
-        target: 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+      '/place-api': {
+        target: 'https://maps.googleapis.com/maps/api/place/',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/autocomplete-api/, ''),
-      },
-      '/details-api': {
-        target: 'https://maps.googleapis.com/maps/api/place/details/json',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/details-api/, ''),
+        rewrite: path => path.replace(/^\/place-api/, ''),
       },
     },
   },
