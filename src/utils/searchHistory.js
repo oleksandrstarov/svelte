@@ -37,6 +37,5 @@ export const addToHistory = ({ placeName, placeId, lat, lng }) => {
   locationsHistory = updatedHistory;
 };
 
-export const getLocationsHistoryAutocomplete = () => {
-  return locationsHistory?.map(({ placeId, placeName }) => ({ placeId, placeName })) || [];
-};
+export const getLocationsHistoryAutocomplete = () =>
+  locationsHistory?.map(({ placeId, placeName }) => ({ placeId, placeName })) || [];
