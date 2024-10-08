@@ -10,7 +10,7 @@
     addToHistory,
     getLocationsHistoryAutocomplete,
     removeFromHistory,
-  } from '../services/localStorageService';
+  } from '../utils/searchHistory';
   import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 
   const languages = [
