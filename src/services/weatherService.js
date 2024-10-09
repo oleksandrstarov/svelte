@@ -113,8 +113,7 @@ class WeatherService {
         .filter(data => DateTime.fromISO(data.time) > now)
         .map(data => ({
           ...data,
-          time: DateTime.fromISO(data.time)
-.toFormat('HH:mm'),
+          time: DateTime.fromISO(data.time).toFormat('HH:mm'),
         }));
     } catch (e) {
       notificationsStore.addNotification({
