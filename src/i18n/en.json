@@ -25,7 +25,8 @@
     "getWeeklyForecast": "Error fetching weekly forecast data",
     "getHourlyForecast": "Error fetching hourly forecast data",
     "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
-    "geolocationNotSupported": "Geolocation is not supported by browser"
+    "geolocationNotSupported": "Geolocation is not supported by browser",
+    "getLocalHistory": "Error getting search history"
   },
   "weeklyForecast": {
     "weather": "Weather",

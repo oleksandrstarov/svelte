@@ -1,25 +1,34 @@
 <script>
   import logo from '/src/assets/svelte.svg';
-  import { link, location, push } from 'svelte-spa-router';
-  import { Button, Input, Select } from 'flowbite-svelte';
+  import { link, location, push, params } from 'svelte-spa-router';
+  import { Button, Input, Select, Spinner } from 'flowbite-svelte';
   import placesService from '../services/placeService';
   import { clickOutside } from '../directives/clickOutside';
   import { debounce } from 'lodash';
   import { t, locale } from 'svelte-i18n';
+  import {
+    addToHistory,
+    getLocationsHistoryAutocomplete,
+    removeFromHistory,
+  } from '../utils/searchHistory';
+  import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 
   const languages = [
     { value: 'en-US', name: $t('header.language.en') },
     { value: 'ua-UA', name: $t('header.language.ua') },
   ];
-  const dummyCity = 'Ukraine, Kyiv, elevation 199m'; // TODO replace dummyCity once favorite places ready
 
   let searchInputContainerRef;
+
+  const { addNotification } = notificationsStore;
 
   let searchValue = '';
   let placesAutocomplete = [];
   let isSearchButton = true;
   let isAutocompleteLoading = false;
   let isNearbyEnabled = true;
+  let isAddressLoading = '';
+  let currentAddress = '';
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
@@ -28,11 +37,18 @@
   $: selectedLang = $locale;
 
   $: {
-    if (!searchValue) {
-      placesAutocomplete = [];
+    if (!searchValue.trim()) {
+      placesAutocomplete = getLocationsHistoryAutocomplete();
       searchInputRef?.focus();
     } else {
       getAutocomplete(searchValue);
+    }
+  }
+  $: {
+    if ($params?.latitude && $params?.longitude) {
+      fetchAddress($params.latitude, $params.longitude);
+    } else {
+      currentAddress = '';
     }
   }
 
@@ -42,23 +58,36 @@
   };
 
   const updateSearchValue = debounce(async value => {
-    searchValue = value.trim();
+    searchValue = value;
   }, 300);
 
   const getAutocomplete = async value => {
     isAutocompleteLoading = true;
 
-    const { predictions } = await placesService.getAutocomplete(value);
+    const autocomplete = await placesService.getAutocomplete(value.trim());
 
-    placesAutocomplete = [...predictions];
+    placesAutocomplete = [...autocomplete];
     isAutocompleteLoading = false;
   };
 
-  const navigateToForecast = async placeId => {
-    const { lat, lng } = await placesService.getPlaceLocation(placeId);
+  const navigateToForecast = async (placeId, placeName) => {
+    const {
+      location: { lat, lng },
+    } = await placesService.getDetails(placeId);
 
+    addToHistory({ placeName, placeId, lat, lng });
     toggleIsSearchButton();
     push(`/forecast/${lat}/${lng}`);
+  };
+
+  const fetchAddress = async (latitude, longitude) => {
+    isAddressLoading = true;
+
+    const placeId = await placesService.getId(latitude, longitude);
+    const { address } = await placesService.getDetails(placeId);
+
+    isAddressLoading = false;
+    currentAddress = address;
   };
 
   const onKeydown = e => {
@@ -67,7 +96,7 @@
     }
 
     if (placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['place_id']);
+      navigateToForecast(placesAutocomplete[0]['placeId'], placesAutocomplete[0]['placeName']);
 
       return;
     }
@@ -75,13 +104,22 @@
     navigateToBrowserLocation();
   };
 
+  const onRemoveFromHistory = (e, placeId) => {
+    e.stopPropagation();
+    removeFromHistory(placeId);
+    placesAutocomplete = getLocationsHistoryAutocomplete();
+  };
+
   const navigateToBrowserLocation = () => {
-    // TODO add notifications instead of logs once it merged
     if (!isNearbyEnabled) {
-      console.log($t('errors.getBrowserLocation'));
+      addNotification({
+        type: NOTIFICATION_TYPE.Error,
+        message: $t('errors.getBrowserLocation'),
+      });
 
       return;
     }
+
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -91,7 +129,11 @@
         },
         error => {
           isNearbyEnabled = false;
-          console.log($t('errors.getBrowserLocation'));
+          addNotification({
+            type: NOTIFICATION_TYPE.Error,
+            message: $t('errors.getBrowserLocation'),
+          });
+
           console.error(error);
         },
       );
@@ -100,7 +142,11 @@
     }
 
     isNearbyEnabled = false;
-    console.log($t('errors.geolocationNotSupported'));
+
+    addNotification({
+      type: NOTIFICATION_TYPE.Error,
+      message: $t('errors.geolocationNotSupported'),
+    });
   };
 </script>
 
@@ -114,7 +160,12 @@
     {#if !isSearchPage && isSearchButton}
       <div class="flex flex-col ml-3">
         <h1 class="text-xl">Svelte</h1>
-        <span class="text-sm pr-2">{dummyCity}</span>
+        <span class="mr-2 text-sm">
+          {currentAddress}
+          {#if isAddressLoading}
+            <Spinner size={3} />
+          {/if}
+        </span>
       </div>
     {/if}
   </div>
@@ -167,12 +218,23 @@
 
         <div class="absolute mt-1 w-full pr-4 md:pr-10 top bg-white">
           <ul class="shadow-lg rounded-md mt-1 max-h-80 overflow-y-auto">
-            {#each placesAutocomplete as { description, place_id: placeId }, i (placeId)}
+            {#each placesAutocomplete as { placeName, placeId } (placeId)}
               <li
-                class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700"
-                on:click={() => navigateToForecast(placeId)}
+                class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50
+                first:border-l-4 first:border-l-primary-700 relative"
+                on:click={() => navigateToForecast(placeId, placeName)}
               >
-                {description}
+                {placeName}
+                {#if !searchValue.trim()}
+                  <Button
+                    class="absolute right-1.5 top-1.5 rounded-full hover:bg-gray-200 py-0 px-1 z-10 focus-within:ring-0"
+                    color="gray"
+                    size="xs"
+                    on:click={e => onRemoveFromHistory(e, placeId)}
+                  >
+                    <span class="material-symbols-outlined text-lg"> close </span>
+                  </Button>
+                {/if}
               </li>
               <hr />
             {/each}
