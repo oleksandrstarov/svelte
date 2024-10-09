@@ -92,7 +92,7 @@ class WeatherService {
       const { data } = await axios.get(`${baseUrl}/forecast`, { params });
 
       return data.hourly.time
-        .filter(time => time.startsWith(selectedDate))
+        .filter(time => time.startsWith(selectedDate) && DateTime.fromISO(time) > now)
         .map((time, index) => ({
           time,
           temperature: data.hourly.temperature_2m[index],
@@ -109,11 +109,6 @@ class WeatherService {
           evapotranspiration: data.hourly.evapotranspiration[index],
           vpd: data.hourly.vapour_pressure_deficit[index],
           weatherCode: data.hourly.weather_code[index],
-        }))
-        .filter(data => DateTime.fromISO(data.time) > now)
-        .map(data => ({
-          ...data,
-          time: DateTime.fromISO(data.time).toFormat('HH:mm'),
         }));
     } catch (e) {
       notificationsStore.addNotification({

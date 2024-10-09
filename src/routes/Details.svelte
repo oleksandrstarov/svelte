@@ -7,6 +7,7 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
+  import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
   import { t } from 'svelte-i18n';
   import weatherService from '../services/weatherService';
@@ -28,7 +29,11 @@
 
     const { date, latitude: lat, longitude: lng } = params;
 
-    hourlyData = await weatherService.getHourlyForecast(lat, lng, date);
+    const response = await weatherService.getHourlyForecast(lat, lng, date);
+    hourlyData = response.map(data => ({
+      ...data,
+      time: DateTime.fromISO(data.time).toFormat('HH:mm'),
+    }));
 
     if (!hourlyData.length) {
       weatherData.isLoading = false;
@@ -37,9 +42,10 @@
       return;
     }
 
-    hourlyData.forEach((el, idx) => {
-      hourlyData[idx] = { ...el, dayPeriod: getDayPeriodByDate({ date: el.time, lat, lng }) };
-    });
+    hourlyData = hourlyData.map((el, idx) => ({
+      ...el,
+      dayPeriod: getDayPeriodByDate({ date: response[idx].time, lat, lng }),
+    }));
 
     weatherData.isLoading = false;
   });
@@ -121,8 +127,25 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#if hourlyData && Array.isArray(hourlyData)}
-          {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, dewPoint, precipitation, windSpeed, windDirection, windGusts, pressure, humidity, cloudCover, visibility, evapotranspiration, vpd }}
-            <TableBodyRow>
+          {#each hourlyData as {
+            time,
+            weatherCode,
+            dayPeriod,
+            temperature,
+            feelsLike,
+            dewPoint,
+            precipitation,
+            windSpeed,
+            windDirection,
+            windGusts,
+            pressure,
+            humidity,
+            cloudCover,
+            visibility,
+            evapotranspiration,
+            vpd
+            }}
+            <TableBodyRow class="text-center">
               <TableBodyCell>{time ?? ''}</TableBodyCell>
               <TableBodyCell class="hidden md:table-cell">
                 {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}

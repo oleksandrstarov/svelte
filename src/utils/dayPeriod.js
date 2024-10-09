@@ -8,8 +8,7 @@ export function getDayPeriodByDate({ date, lat, lng }) {
   const formattedDate = new Date(date);
   const times = SunCalc.getTimes(formattedDate, lat, lng);
 
-  const sunrise = times.sunrise;
-  const sunset = times.sunset;
+  const { sunrise, sunset } = times;
 
   if (formattedDate >= sunrise && formattedDate < sunset) {
     return 'day';
