@@ -24,8 +24,7 @@
   const detailsRoute = '/details';
 
   function formatDate(dateString) {
-    return DateTime.fromISO(dateString)
-.toFormat('cccc dd LLL');
+    return DateTime.fromISO(dateString).toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
