@@ -24,8 +24,7 @@
   const detailsRoute = '/details';
 
   function formatDate(dateString) {
-    return DateTime.fromISO(dateString)
-      .toFormat('cccc dd LLL');
+    return DateTime.fromISO(dateString).toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
@@ -60,7 +59,7 @@
   }
 </script>
 
-<div class="p-5 md:p-10">
+<div class="py-5 md:py-10">
   {#if weatherData.isLoading}
     <div>{$t('loading')}</div>
   {:else if weatherData.hasError}

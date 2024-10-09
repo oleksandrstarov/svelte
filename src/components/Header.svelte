@@ -1,49 +1,23 @@
 <script>
   import logo from '/src/assets/svelte.svg';
-  import { link, location, push, params } from 'svelte-spa-router';
-  import { Button, Input, Select, Spinner } from 'flowbite-svelte';
+  import { link, location, params } from 'svelte-spa-router';
+  import { Select, Spinner } from 'flowbite-svelte';
   import placesService from '../services/placeService';
-  import { clickOutside } from '../directives/clickOutside';
-  import { debounce } from 'lodash';
   import { t, locale } from 'svelte-i18n';
-  import {
-    addToHistory,
-    getLocationsHistoryAutocomplete,
-    removeFromHistory,
-  } from '../utils/searchHistory';
-  import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
+  import ForecastAutocomplete from './ForecastSearch.svelte';
 
   const languages = [
     { value: 'en-US', name: $t('header.language.en') },
     { value: 'ua-UA', name: $t('header.language.ua') },
   ];
 
-  let searchInputContainerRef;
-
-  const { addNotification } = notificationsStore;
-
-  let searchValue = '';
-  let placesAutocomplete = [];
   let isSearchButton = true;
-  let isAutocompleteLoading = false;
-  let isNearbyEnabled = true;
   let isAddressLoading = '';
   let currentAddress = '';
 
-  $: searchInputRef = searchInputContainerRef?.querySelector('input');
-
-  $: isNoData = !placesAutocomplete.length && searchValue && !isAutocompleteLoading;
   $: isSearchPage = $location.includes('/search');
   $: selectedLang = $locale;
 
-  $: {
-    if (!searchValue.trim()) {
-      placesAutocomplete = getLocationsHistoryAutocomplete();
-      searchInputRef?.focus();
-    } else {
-      getAutocomplete(searchValue);
-    }
-  }
   $: {
     if ($params?.latitude && $params?.longitude) {
       fetchAddress($params.latitude, $params.longitude);
@@ -52,32 +26,8 @@
     }
   }
 
-  const toggleIsSearchButton = () => {
-    searchValue = '';
-    isSearchButton = !isSearchButton;
-  };
-
-  const updateSearchValue = debounce(async value => {
-    searchValue = value;
-  }, 300);
-
-  const getAutocomplete = async value => {
-    isAutocompleteLoading = true;
-
-    const autocomplete = await placesService.getAutocomplete(value.trim());
-
-    placesAutocomplete = [...autocomplete];
-    isAutocompleteLoading = false;
-  };
-
-  const navigateToForecast = async (placeId, placeName) => {
-    const {
-      location: { lat, lng },
-    } = await placesService.getDetails(placeId);
-
-    addToHistory({ placeName, placeId, lat, lng });
-    toggleIsSearchButton();
-    push(`/forecast/${lat}/${lng}`);
+  const setIsSearchButton = ({ detail }) => {
+    isSearchButton = detail;
   };
 
   const fetchAddress = async (latitude, longitude) => {
@@ -89,72 +39,11 @@
     isAddressLoading = false;
     currentAddress = address;
   };
-
-  const onKeydown = e => {
-    if (e.key !== 'Enter') {
-      return;
-    }
-
-    if (placesAutocomplete.length) {
-      navigateToForecast(placesAutocomplete[0]['placeId'], placesAutocomplete[0]['placeName']);
-
-      return;
-    }
-
-    navigateToBrowserLocation();
-  };
-
-  const onRemoveFromHistory = (e, placeId) => {
-    e.stopPropagation();
-    removeFromHistory(placeId);
-    placesAutocomplete = getLocationsHistoryAutocomplete();
-  };
-
-  const navigateToBrowserLocation = () => {
-    if (!isNearbyEnabled) {
-      addNotification({
-        type: NOTIFICATION_TYPE.Error,
-        message: $t('errors.getBrowserLocation'),
-      });
-
-      return;
-    }
-
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const { latitude, longitude } = position.coords;
-          push(`/forecast/${latitude}/${longitude}`);
-          isSearchButton = true;
-        },
-        error => {
-          isNearbyEnabled = false;
-          addNotification({
-            type: NOTIFICATION_TYPE.Error,
-            message: $t('errors.getBrowserLocation'),
-          });
-
-          console.error(error);
-        },
-      );
-
-      return;
-    }
-
-    isNearbyEnabled = false;
-
-    addNotification({
-      type: NOTIFICATION_TYPE.Error,
-      message: $t('errors.geolocationNotSupported'),
-    });
-  };
 </script>
 
-<header
-  class="flex justify-center flex-wrap pt-2 px-4 md:pt-5 md:px-10 sm:justify-between sm:items-center sticky"
->
+<header class="flex justify-center flex-wrap sm:justify-between sm:items-center sticky">
   <div class="flex sm:items-center">
-    <a use:link={{ href: '/' }}>
+    <a class="flex items-center" use:link={{ href: '/' }}>
       <img class="h-12" src={logo} alt="logo" />
     </a>
     {#if !isSearchPage && isSearchButton}
@@ -163,24 +52,15 @@
         <span class="mr-2 text-sm">
           {currentAddress}
           {#if isAddressLoading}
-            <Spinner size={3} />
+            <Spinner size={5} />
           {/if}
         </span>
       </div>
     {/if}
   </div>
-
-  {#if isSearchButton}
-    <div class="flex">
-      <Button
-        size="xs"
-        class="text-md text-primary-700 outline-primary-700 m-2 hover:bg-primary-50 hover:text-primary-700 focus-within:ring-0"
-        outline
-        on:click={toggleIsSearchButton}
-      >
-        <span class="material-symbols-outlined pr-1">search</span>
-        {$t('header.search')}
-      </Button>
+  <div class="flex grow justify-end">
+    <ForecastAutocomplete {isSearchButton} on:setIsSearchButton={setIsSearchButton} />
+    {#if isSearchButton}
       <Select
         placeholder=""
         class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
@@ -188,73 +68,6 @@
         value={selectedLang}
         on:input={({ target: { value } }) => locale.set(value)}
       />
-    </div>
-  {:else}
-    <div class="flex-grow">
-      <div class="pl-4 md:pl-10 relative" use:clickOutside on:clickOutside={toggleIsSearchButton}>
-        <div class="content" bind:this={searchInputContainerRef}>
-          <Input
-            value={searchValue}
-            placeholder={$t('header.searchPlaceholder')}
-            class="w-full h-12 my-2"
-            on:keydown={onKeydown}
-            on:input={({ target: { value } }) => updateSearchValue(value)}
-          >
-            <span slot="left" class="material-symbols-outlined">search</span>
-            <span class="flex items-center" slot="right">
-              {#if searchValue && !isAutocompleteLoading}
-                <span
-                  class="material-symbols-outlined cursor-pointer"
-                  on:click={() => (searchValue = '')}
-                >
-                  cancel
-                </span>
-              {:else if searchValue && isAutocompleteLoading}
-                <span class="material-symbols-outlined animate-spin"> refresh </span>
-              {/if}
-            </span>
-          </Input>
-        </div>
-
-        <div class="absolute mt-1 w-full pr-4 md:pr-10 top bg-white">
-          <ul class="shadow-lg rounded-md mt-1 max-h-80 overflow-y-auto">
-            {#each placesAutocomplete as { placeName, placeId } (placeId)}
-              <li
-                class="py-2 px-2 hover:bg-primary-50 cursor-pointer first:bg-primary-50
-                first:border-l-4 first:border-l-primary-700 relative"
-                on:click={() => navigateToForecast(placeId, placeName)}
-              >
-                {placeName}
-                {#if !searchValue.trim()}
-                  <Button
-                    class="absolute right-1.5 top-1.5 rounded-full hover:bg-gray-200 py-0 px-1 z-10 focus-within:ring-0"
-                    color="gray"
-                    size="xs"
-                    on:click={e => onRemoveFromHistory(e, placeId)}
-                  >
-                    <span class="material-symbols-outlined text-lg"> close </span>
-                  </Button>
-                {/if}
-              </li>
-              <hr />
-            {/each}
-
-            <li
-              on:click={navigateToBrowserLocation}
-              class="py-2 px-2 text-md font-bold flex items-center
-              {isNearbyEnabled
-                ? 'text-primary-700 hover:bg-primary-50 cursor-pointer first:bg-primary-50 first:border-l-4 first:border-l-primary-700'
-                : 'hover:gray-300 first:bg-gray-200 cursor-not-allowed text-gray-500 first:border-l-0'}"
-            >
-              <span class="material-symbols-outlined pr-2"> near_me </span>
-              {$t('header.nearby')}
-            </li>
-            {#if isNoData}
-              <li class="py-2 px-2 text-center">{$t('general.noData')}</li>
-            {/if}
-          </ul>
-        </div>
-      </div>
-    </div>
-  {/if}
+    {/if}
+  </div>
 </header>
