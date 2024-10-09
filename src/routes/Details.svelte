@@ -55,7 +55,9 @@
       <div class="grid grid-cols-1 gap-4">
         {#if hourlyData && Array.isArray(hourlyData)}
           {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, precipitation, windSpeed }}
-            <div class="bg-white shadow-md rounded-md p-4 flex flex-col items-center">
+            <div
+              class="bg-white rounded-xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] p-4 flex flex-col items-center"
+            >
               <div class="text-center font-bold">
                 {time ?? ''}
               </div>
@@ -119,23 +121,7 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#if hourlyData && Array.isArray(hourlyData)}
-          {#each hourlyData as {
-            time,
-            weatherCode,
-            dayPeriod,
-            temperature,
-            feelsLike,
-            dewPoint,
-            precipitation,
-            windSpeed,
-            windDirection,
-            windGusts,
-            pressure,
-            humidity,
-            cloudCover,
-            visibility,
-            evapotranspiration,
-            vpd }}
+          {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, dewPoint, precipitation, windSpeed, windDirection, windGusts, pressure, humidity, cloudCover, visibility, evapotranspiration, vpd }}
             <TableBodyRow>
               <TableBodyCell>{time ?? ''}</TableBodyCell>
               <TableBodyCell class="hidden md:table-cell">

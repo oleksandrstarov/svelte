@@ -68,7 +68,9 @@
     <div class="block lg:hidden">
       <div class="grid grid-cols-1 gap-4">
         {#each forecastData as { date, weatherCode, maxTemp, minTemp, precipitation, windSpeed, rawDate }}
-          <div class="bg-white shadow-md rounded-md p-4 flex flex-col items-center">
+          <div
+            class="bg-white rounded-xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] p-4 flex flex-col items-center"
+          >
             <div class="text-center font-bold">{date}</div>
             {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}
               <img
