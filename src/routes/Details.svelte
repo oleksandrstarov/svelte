@@ -1,1 +1,190 @@
-<h1>Details</h1>
+<script>
+  import {
+    Table,
+    TableBody,
+    TableBodyCell,
+    TableBodyRow,
+    TableHead,
+    TableHeadCell,
+  } from 'flowbite-svelte';
+  import { onMount } from 'svelte';
+  import { t } from 'svelte-i18n';
+  import weatherService from '../services/weatherService';
+  import weatherCodes from '../assets/weather-interpretation-code-description.json';
+  import { getDayPeriodByDate } from '../utils/dayPeriod';
+
+  export let params;
+
+  let hourlyData = [];
+
+  const weatherData = {
+    isLoading: false,
+    hasError: false,
+  };
+
+  onMount(async () => {
+    weatherData.isLoading = true;
+    weatherData.hasError = false;
+
+    const { date, latitude: lat, longitude: lng } = params;
+
+    hourlyData = await weatherService.getHourlyForecast(lat, lng, date);
+
+    if (!hourlyData.length) {
+      weatherData.isLoading = false;
+      weatherData.hasError = true;
+
+      return;
+    }
+
+    hourlyData.forEach((el, idx) => {
+      hourlyData[idx] = { ...el, dayPeriod: getDayPeriodByDate({ date: el.time, lat, lng }) };
+    });
+
+    weatherData.isLoading = false;
+  });
+</script>
+
+<div class="p-5 md:p-10">
+  {#if weatherData.isLoading}
+    <div>{$t('weeklyForecast.loading')}</div>
+  {:else if weatherData.hasError}
+    <div>{$t('errors.getWeeklyForecast')}</div>
+  {:else}
+    <div class="block lg:hidden">
+      <div class="grid grid-cols-1 gap-4">
+        {#if hourlyData && Array.isArray(hourlyData)}
+          {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, precipitation, windSpeed }}
+            <div class="bg-white shadow-md rounded-md p-4 flex flex-col items-center">
+              <div class="text-center font-bold">
+                {time ?? ''}
+              </div>
+              {#if weatherCode !== null && weatherCodes[weatherCode]?.[dayPeriod]?.image}
+                <img
+                  class="w-16 h-16 object-cover"
+                  src={weatherCodes[weatherCode][dayPeriod].image}
+                  alt="weather"
+                />
+              {/if}
+              <div class="text-lg">
+                <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}>{temperature}°C</span>
+                /
+                <span class={`text-${feelsLike >= 0 ? 'red' : 'blue'}-500`}>{feelsLike}°C</span>
+              </div>
+              <div class="text-sm">
+                <span class="text-blue-500">{precipitation} {$t('hourlyForecast.millimeters')}</span
+                >
+                |
+                <span>{windSpeed} {$t('hourlyForecast.kilometersPerHour')}</span>
+              </div>
+            </div>
+          {/each}
+        {/if}
+      </div>
+    </div>
+
+    <Table
+      hoverable={true}
+      divClass="mt-2 m-4 md:mt-5 md:mx-10 rounded-3xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] hidden lg:block"
+    >
+      <TableHead>
+        <TableHeadCell>{$t('hourlyForecast.time')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.weather')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.temperature')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.feelsLike')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.dewPoint')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.precipitation')}</TableHeadCell>
+        <TableHeadCell
+          >{$t('hourlyForecast.windSpeed')} + {$t('hourlyForecast.windDirection')}</TableHeadCell
+        >
+        <TableHeadCell>{$t('hourlyForecast.windGusts')}</TableHeadCell>
+        <TableHeadCell class="max-xl:hidden table-cell"
+          >{$t('hourlyForecast.pressure')}</TableHeadCell
+        >
+        <TableHeadCell class="max-xl:hidden table-cell"
+          >{$t('hourlyForecast.humidity')}</TableHeadCell
+        >
+        <TableHeadCell class="max-xl:hidden table-cell"
+          >{$t('hourlyForecast.cloudCover')}</TableHeadCell
+        >
+        <TableHeadCell class="max-2xl:hidden table-cell"
+          >{$t('hourlyForecast.visibility')}</TableHeadCell
+        >
+        <TableHeadCell class="max-2xl:hidden table-cell"
+          >{$t('hourlyForecast.evaporation')}</TableHeadCell
+        >
+        <TableHeadCell class="max-2xl:hidden table-cell"
+          >{$t('hourlyForecast.pressureDeficit')}</TableHeadCell
+        >
+      </TableHead>
+      <TableBody tableBodyClass="divide-y">
+        {#if hourlyData && Array.isArray(hourlyData)}
+          {#each hourlyData as {
+            time,
+            weatherCode,
+            dayPeriod,
+            temperature,
+            feelsLike,
+            dewPoint,
+            precipitation,
+            windSpeed,
+            windDirection,
+            windGusts,
+            pressure,
+            humidity,
+            cloudCover,
+            visibility,
+            evapotranspiration,
+            vpd }}
+            <TableBodyRow>
+              <TableBodyCell>{time ?? ''}</TableBodyCell>
+              <TableBodyCell class="hidden md:table-cell">
+                {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}
+                  <img
+                    class="w-12 h-12 object-cover"
+                    src={weatherCodes[weatherCode][dayPeriod].image}
+                    alt="weather"
+                  />
+                {/if}
+              </TableBodyCell>
+              <TableBodyCell>{temperature ?? ''}</TableBodyCell>
+              <TableBodyCell>{feelsLike ?? ''}</TableBodyCell>
+              <TableBodyCell>{dewPoint ?? ''}</TableBodyCell>
+              <TableBodyCell>{precipitation ?? ''}</TableBodyCell>
+              <TableBodyCell>
+                <div class="flex items-center">
+                  <span>{windSpeed ?? ''}</span>
+                  <span
+                    class="material-symbols-outlined text-md md:text-xl transform-500"
+                    style="transform: rotate({windDirection}deg);"
+                  >
+                    north
+                  </span>
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>{windGusts ?? ''}</TableBodyCell>
+              <TableBodyCell tdClass="table-cell max-xl:hidden font-medium"
+                >{pressure ?? ''}</TableBodyCell
+              >
+              <TableBodyCell tdClass="table-cell max-xl:hidden font-medium"
+                >{humidity ?? ''}</TableBodyCell
+              >
+              <TableBodyCell tdClass="table-cell max-xl:hidden font-medium"
+                >{cloudCover ?? ''}</TableBodyCell
+              >
+              <TableBodyCell tdClass="table-cell max-2xl:hidden font-medium"
+                >{visibility ?? ''}</TableBodyCell
+              >
+              <TableBodyCell tdClass="table-cell max-2xl:hidden font-medium"
+                >{evapotranspiration ?? ''}</TableBodyCell
+              >
+              <TableBodyCell tdClass="table-cell max-2xl:hidden font-medium"
+                >{vpd ?? ''}</TableBodyCell
+              >
+            </TableBodyRow>
+          {/each}
+        {/if}
+      </TableBody>
+    </Table>
+  {/if}
+</div>

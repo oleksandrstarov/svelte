@@ -3,7 +3,7 @@
   import { t } from 'svelte-i18n';
 
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
-  import getDayPeriod from '../utils/dayPeriod';
+  import { getDayPeriodById } from '../utils/dayPeriod';
 
   export let {
     temperature,
@@ -18,7 +18,7 @@
     hasError,
   } = {};
 
-  $: dayPeriod = getDayPeriod(timeOfDayId);
+  $: dayPeriod = getDayPeriodById(timeOfDayId);
 </script>
 
 <div class="p-5 md:p-10">

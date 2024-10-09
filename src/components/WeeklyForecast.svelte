@@ -25,7 +25,7 @@
 
   function formatDate(dateString) {
     return DateTime.fromISO(dateString)
-      .toFormat('cccc dd LLL');
+.toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
@@ -62,9 +62,9 @@
 
 <div class="p-5 md:p-10">
   {#if weatherData.isLoading}
-    <div>{$t('loading')}</div>
+    <div>{$t('weeklyForecast.loading')}</div>
   {:else if weatherData.hasError}
-    <div>{$t('errorLoadingData')}</div>
+    <div>{$t('errors.getWeeklyForecast')}</div>
   {:else}
     <div class="block lg:hidden">
       <div class="grid grid-cols-1 gap-4">
@@ -89,7 +89,7 @@
               <span>{windSpeed} {$t('weeklyForecast.kilometersPerHour')}</span>
             </div>
             <a
-              href={`${detailsRoute}/${latitude}/${longitude}${rawDate}`}
+              href={`${detailsRoute}/${latitude}/${longitude}/${rawDate}`}
               use:link
               class="text-blue-500 hover:underline mt-2"
             >
@@ -100,7 +100,7 @@
       </div>
     </div>
 
-    <div class="hidden lg:block">
+    <div class="hidden lg:block shadow-[0px_5px_15px_rgba(0,0,0,0.35)] rounded-md">
       <Table shadow hoverable={true}>
         <TableHead>
           <TableHeadCell></TableHeadCell>
@@ -138,7 +138,7 @@
                 {$t('weeklyForecast.kilometersPerHour')}
               </TableBodyCell>
               <TableBodyCell>
-                <a href={`${detailsRoute}/${latitude}/${longitude}${rawDate}`} use:link
+                <a href={`${detailsRoute}/${latitude}/${longitude}/${rawDate}`} use:link
                   >{$t('weeklyForecast.openHourlyForecast')}</a
                 >
               </TableBodyCell>

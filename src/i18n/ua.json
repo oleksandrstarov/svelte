@@ -23,6 +23,7 @@
     "getAutocomplete": "Помилка отримання даних aвтодоповнення",
     "getWeather": "Помилка отримання даних про погоду",
     "getWeeklyForecast": "Помилка отримання даних щотижневого прогнозу",
+    "getHourlyForecast": "Помилка отримання даних погодинного прогнозу",
     "getBrowserLocation": "Помилка отримання місцезнаходження. Будь ласка перевірте чи увімкнена геолокація і перезавантажте сторінку",
     "geolocationNotSupported": "Геолокація не підтримується цим браузером"
   },
@@ -32,6 +33,26 @@
     "precipitation": "Осадки",
     "wind": "Вітер",
     "openHourlyForecast": "Відкрити погодинний прогноз",
+    "kilometersPerHour": "км/г",
+    "millimeters": "мм",
+    "loading": "Завантаження..."
+  },
+  "hourlyForecast": {
+    "time": "Час",
+    "weather": "Погода",
+    "temperature": "Темп (°C)",
+    "feelsLike": "Відчувається як (°C)",
+    "dewPoint": "Точка роси (°C)",
+    "precipitation": "Опади (мм)",
+    "windSpeed": "Вітер (м/с)",
+    "windDirection": "Напрям",
+    "windGusts": "Пориви (км/год)",
+    "pressure": "Тиск (гПа)",
+    "humidity": "Вологість (%)",
+    "cloudCover": "Хмарність (%)",
+    "visibility": "Видимість (м)",
+    "evaporation": "Випаровування (мм)",
+    "pressureDeficit": "Дефіцит тиску (кПа)",
     "kilometersPerHour": "км/г",
     "millimeters": "мм"
   }
