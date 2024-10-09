@@ -23,6 +23,7 @@
     "getAutocomplete": "Error fetching autocomplete data",
     "getWeather": "Error fetching weather data",
     "getWeeklyForecast": "Error fetching weekly forecast data",
+    "getHourlyForecast": "Error fetching hourly forecast data",
     "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
     "geolocationNotSupported": "Geolocation is not supported by browser",
     "getLocalHistory": "Error getting search history"
@@ -33,6 +34,26 @@
     "precipitation": "Precipitation",
     "wind": "Wind",
     "openHourlyForecast": "Open hourly forecast",
+    "kilometersPerHour": "km/h",
+    "millimeters": "mm",
+    "loading": "Loading..."
+  },
+  "hourlyForecast": {
+    "time": "Time",
+    "weather": "Weather",
+    "temperature": "Temp (°C)",
+    "feelsLike": "Feels like (°C)",
+    "dewPoint": "Dew Point (°C)",
+    "precipitation": "Precip. (mm)",
+    "windSpeed": "Wind (m/s)",
+    "windDirection": "Direction",
+    "windGusts": "Gusts (km/h)",
+    "pressure": "Pressure (hPA)",
+    "humidity": "Humidity (%)",
+    "cloudCover": "CloudCover (%)",
+    "visibility": "Visibility (m)",
+    "evaporation": "Evap. (mm)",
+    "pressureDeficit": "VPD (kpa)",
     "kilometersPerHour": "km/h",
     "millimeters": "mm"
   }

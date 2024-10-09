@@ -9,7 +9,7 @@
     TableHeadCell,
   } from 'flowbite-svelte';
   import { DateTime } from 'luxon';
-  import { link } from 'svelte-spa-router';
+  import { link, push } from 'svelte-spa-router';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { t } from 'svelte-i18n';
 
@@ -24,8 +24,7 @@
   const detailsRoute = '/details';
 
   function formatDate(dateString) {
-    return DateTime.fromISO(dateString)
-      .toFormat('cccc dd LLL');
+    return DateTime.fromISO(dateString).toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
@@ -62,14 +61,16 @@
 
 <div class="p-5 md:p-10">
   {#if weatherData.isLoading}
-    <div>{$t('loading')}</div>
+    <div>{$t('weeklyForecast.loading')}</div>
   {:else if weatherData.hasError}
-    <div>{$t('errorLoadingData')}</div>
+    <div>{$t('errors.getWeeklyForecast')}</div>
   {:else}
     <div class="block lg:hidden">
       <div class="grid grid-cols-1 gap-4">
         {#each forecastData as { date, weatherCode, maxTemp, minTemp, precipitation, windSpeed, rawDate }}
-          <div class="bg-white shadow-md rounded-md p-4 flex flex-col items-center">
+          <div
+            class="bg-white rounded-xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] p-4 flex flex-col items-center"
+          >
             <div class="text-center font-bold">{date}</div>
             {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}
               <img
@@ -89,7 +90,7 @@
               <span>{windSpeed} {$t('weeklyForecast.kilometersPerHour')}</span>
             </div>
             <a
-              href={`${detailsRoute}/${latitude}/${longitude}${rawDate}`}
+              href={`${detailsRoute}/${latitude}/${longitude}/${rawDate}`}
               use:link
               class="text-blue-500 hover:underline mt-2"
             >
@@ -100,7 +101,9 @@
       </div>
     </div>
 
-    <div class="hidden lg:block">
+    <div
+      class="hidden lg:block shadow-[0px_5px_15px_rgba(0,0,0,0.35)] rounded-md max-w-7xl md:m-auto"
+    >
       <Table shadow hoverable={true}>
         <TableHead>
           <TableHeadCell></TableHeadCell>
@@ -110,11 +113,14 @@
             >{$t('weeklyForecast.precipitation')}</TableHeadCell
           >
           <TableHeadCell class="hidden md:table-cell">{$t('weeklyForecast.wind')}</TableHeadCell>
-          <TableHeadCell></TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each forecastData as { date, weatherCode, maxTemp, minTemp, precipitation, windSpeed, rawDate }}
-            <TableBodyRow>
+            <TableBodyRow
+              on:click={() => {
+                push(`${detailsRoute}/${latitude}/${longitude}/${rawDate}`);
+              }}
+            >
               <TableBodyCell>{date}</TableBodyCell>
               <TableBodyCell class="hidden md:table-cell">
                 {#if weatherCode !== null && weatherCodes[weatherCode]?.['day']?.image}
@@ -136,11 +142,6 @@
               <TableBodyCell class="hidden md:table-cell">
                 {windSpeed}
                 {$t('weeklyForecast.kilometersPerHour')}
-              </TableBodyCell>
-              <TableBodyCell>
-                <a href={`${detailsRoute}/${latitude}/${longitude}${rawDate}`} use:link
-                  >{$t('weeklyForecast.openHourlyForecast')}</a
-                >
               </TableBodyCell>
             </TableBodyRow>
           {/each}
