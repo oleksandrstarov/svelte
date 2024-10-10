@@ -21,7 +21,7 @@
   },
   "search": {
   "searchResults": "Результати пошуку",
-  "searchResultsCount": "Показано {count} результатів для '{query}':",
+  "searchResultsCount": "Показано {count} результатів для {query}:",
   "enterLocation": "Будь ласка, введіть місце для пошуку",
   "cantFind": "Не можете знайти місце, яке шукаєте?",
   "checkName": "Перевірте правильність написання назви місця.",
