@@ -41,9 +41,9 @@
   "hourlyForecast": {
     "time": "Time",
     "weather": "Weather",
-    "temperature": "Temp (°C)",
-    "feelsLike": "Feels like (°C)",
-    "dewPoint": "Dew Point (°C)",
+    "temperature": "Temp",
+    "feelsLike": "Feels like",
+    "dewPoint": "Dew Point %",
     "precipitation": "Precip. (mm)",
     "windSpeed": "Wind (m/s)",
     "windDirection": "Direction",

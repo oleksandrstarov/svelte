@@ -41,9 +41,9 @@
   "hourlyForecast": {
     "time": "Час",
     "weather": "Погода",
-    "temperature": "Темп (°C)",
-    "feelsLike": "Відчувається як (°C)",
-    "dewPoint": "Точка роси (°C)",
+    "temperature": "Темп",
+    "feelsLike": "Відчувається як",
+    "dewPoint": "Точка роси %",
     "precipitation": "Опади (мм)",
     "windSpeed": "Вітер (м/с)",
     "windDirection": "Напрям",

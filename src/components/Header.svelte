@@ -12,10 +12,16 @@
     removeFromHistory,
   } from '../utils/searchHistory';
   import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
+  import { temperatureUnit } from '../stores/temperature';
 
   const languages = [
     { value: 'en-US', name: $t('header.language.en') },
     { value: 'ua-UA', name: $t('header.language.ua') },
+  ];
+
+  const temperatureUnits = [
+    { value: 'c', name: '°C' },
+    { value: 'f', name: '°F' },
   ];
 
   let searchInputContainerRef;
@@ -29,6 +35,7 @@
   let isNearbyEnabled = true;
   let isAddressLoading = '';
   let currentAddress = '';
+  let selectedTemperatureUnit = '';
 
   $: searchInputRef = searchInputContainerRef?.querySelector('input');
 
@@ -51,6 +58,10 @@
       currentAddress = '';
     }
   }
+
+  temperatureUnit.subscribe(unit => {
+    selectedTemperatureUnit = unit;
+  });
 
   const toggleIsSearchButton = () => {
     searchValue = '';
@@ -148,6 +159,11 @@
       message: $t('errors.geolocationNotSupported'),
     });
   };
+
+  const handleUnitChange = event => {
+    const newUnit = event.target.value;
+    temperatureUnit.set(newUnit);
+  };
 </script>
 
 <header
@@ -187,6 +203,13 @@
         items={languages}
         value={selectedLang}
         on:input={({ target: { value } }) => locale.set(value)}
+      />
+      <Select
+        placeholder=""
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
+        items={temperatureUnits}
+        value={selectedTemperatureUnit}
+        on:change={handleUnitChange}
       />
     </div>
   {:else}
