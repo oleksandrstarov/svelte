@@ -12,6 +12,8 @@
   import { link, push } from 'svelte-spa-router';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { t } from 'svelte-i18n';
+  import { temperatureUnit } from '../stores/temperature';
+  import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
 
   export let latitude;
   export let longitude;
@@ -22,12 +24,15 @@
   };
   let forecastData = [];
   const detailsRoute = '/details';
+  let temperatureSign;
 
   function formatDate(dateString) {
     return DateTime.fromISO(dateString).toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
+    temperatureSign = temperatureUnitSymbols[$temperatureUnit];
+
     weatherData.isLoading = true;
     weatherData.hasError = false;
 
@@ -54,7 +59,7 @@
     weatherData.isLoading = false;
   }
 
-  $: if (latitude && longitude) {
+  $: if ((latitude && longitude) || $temperatureUnit) {
     fetchWeatherData(latitude, longitude);
   }
 </script>
@@ -80,9 +85,13 @@
               />
             {/if}
             <div class="text-lg">
-              <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}>{maxTemp}°C</span>
+              <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}
+                >{maxTemp}{temperatureSign}</span
+              >
               /
-              <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}>{minTemp}°C</span>
+              <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}
+                >{minTemp}{temperatureSign}</span
+              >
             </div>
             <div class="text-sm">
               <span class="text-blue-500">{precipitation} {$t('weeklyForecast.millimeters')}</span>
@@ -132,8 +141,13 @@
                 {/if}
               </TableBodyCell>
               <TableBodyCell>
-                <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}>{maxTemp}°C</span> /
-                <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}>{minTemp}°C</span>
+                <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}
+                  >{maxTemp}{temperatureSign}</span
+                >
+                /
+                <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}
+                  >{minTemp}{temperatureSign}</span
+                >
               </TableBodyCell>
               <TableBodyCell class="hidden md:table-cell text-blue-500">
                 {precipitation}

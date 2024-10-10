@@ -13,6 +13,8 @@
   import weatherService from '../services/weatherService';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { getDayPeriodByDate } from '../utils/dayPeriod';
+  import { temperatureUnit } from '../stores/temperature';
+  import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
 
   export let params;
 
@@ -23,30 +25,33 @@
     hasError: false,
   };
 
-  onMount(async () => {
+  $: temperatureSign = temperatureUnitSymbols[$temperatureUnit];
+  $: temperatureUnit.subscribe(() => {
+    fetchWeather();
+  });
+
+  const fetchWeather = async () => {
     weatherData.isLoading = true;
-
     const { date, latitude: lat, longitude: lng } = params;
-
     const response = await weatherService.getHourlyForecast(lat, lng, date);
     hourlyData = response.map(data => ({
       ...data,
       time: DateTime.fromISO(data.time).toFormat('HH:mm'),
     }));
-
     if (!hourlyData.length) {
       weatherData.isLoading = false;
       weatherData.hasError = true;
 
       return;
     }
-
     hourlyData = hourlyData.map((el, idx) => ({
       ...el,
       dayPeriod: getDayPeriodByDate({ date: response[idx].time, lat, lng }),
     }));
-
     weatherData.isLoading = false;
+  };
+  onMount(async () => {
+    fetchWeather();
   });
 </script>
 
@@ -74,9 +79,13 @@
                 />
               {/if}
               <div class="text-lg">
-                <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}>{temperature}°C</span>
+                <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}
+                  >{temperature} ({temperatureSign})</span
+                >
                 /
-                <span class={`text-${feelsLike >= 0 ? 'red' : 'blue'}-500`}>{feelsLike}°C</span>
+                <span class={`text-${feelsLike >= 0 ? 'red' : 'blue'}-500`}
+                  >{feelsLike} ({temperatureSign})</span
+                >
               </div>
               <div class="text-sm">
                 <span class="text-blue-500">{precipitation} {$t('hourlyForecast.millimeters')}</span
@@ -97,8 +106,8 @@
       <TableHead>
         <TableHeadCell>{$t('hourlyForecast.time')}</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.weather')}</TableHeadCell>
-        <TableHeadCell>{$t('hourlyForecast.temperature')}</TableHeadCell>
-        <TableHeadCell>{$t('hourlyForecast.feelsLike')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.temperature')} ({temperatureSign})</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.feelsLike')} ({temperatureSign})</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.dewPoint')}</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.precipitation')}</TableHeadCell>
         <TableHeadCell
