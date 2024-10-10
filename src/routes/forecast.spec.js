@@ -12,7 +12,7 @@ beforeEach(() => {
   locale.set('en');
 });
 
-describe('ForecastPage Component', () => {
+describe('ForecastPage', () => {
   it('should get forecast data then display forecast', async () => {
     const mockWeatherData = {
       temperature: 20,
