@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 describe('ForecastPage Component', () => {
-  it('getting forecast data then displays forecast', async () => {
+  it('should get forecast data then display forecast', async () => {
     const mockWeatherData = {
       temperature: 20,
       feelsLike: 18,

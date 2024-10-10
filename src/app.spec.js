@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/svelte';
-import { expect, test, beforeEach, describe } from 'vitest';
+import { expect, it, beforeEach, describe } from 'vitest';
 import App from './App.svelte';
 import { isLoading } from 'svelte-i18n';
 import { init, register, locale } from 'svelte-i18n';
@@ -11,7 +11,7 @@ beforeEach(() => {
 });
 
 describe('App', () => {
-  test('renders header, and notifications components when not loading', () => {
+  it('should render header, and notifications components when not loading', () => {
     isLoading.set(false);
 
     render(App);
@@ -20,7 +20,7 @@ describe('App', () => {
     expect(screen.getByTestId('notifications-element')).toBeInTheDocument();
   });
 
-  test('renders spinner when loading', async () => {
+  it('should render spinner when loading', async () => {
     isLoading.set(true);
 
     render(App);

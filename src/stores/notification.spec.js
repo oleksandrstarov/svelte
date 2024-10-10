@@ -2,16 +2,11 @@ import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { NOTIFICATION_TYPE, notificationsStore } from './notification';
 
 describe('notificationsStore', () => {
-  let unsubscribe;
-
   beforeEach(() => {
     vi.useFakeTimers();
-    notificationsStore.set({ notifications: [] });
-    unsubscribe = notificationsStore.subscribe(() => {});
   });
 
   afterEach(() => {
-    unsubscribe();
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
   });
@@ -42,6 +37,59 @@ describe('notificationsStore', () => {
     expect(notifications[0].color).toBe('green');
   });
 
+  it('should add error notifications', () => {
+    notificationsStore.addNotification({
+      message: 'Error Notification',
+    });
+
+    let notifications;
+    notificationsStore.subscribe(value => {
+      notifications = value.notifications;
+    })();
+
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0].message).toBe('Error Notification');
+    expect(notifications[0].count).toBe(1);
+    expect(notifications[0].icon).toBe('error');
+    expect(notifications[0].color).toBe('red');
+  });
+
+  it('should add warning notifications', () => {
+    notificationsStore.addNotification({
+      type: NOTIFICATION_TYPE.Warning,
+      message: 'Warning Notification',
+    });
+
+    let notifications;
+    notificationsStore.subscribe(value => {
+      notifications = value.notifications;
+    })();
+
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0].message).toBe('Warning Notification');
+    expect(notifications[0].count).toBe(1);
+    expect(notifications[0].icon).toBe('warning');
+    expect(notifications[0].color).toBe('yellow');
+  });
+
+  it('should add info notifications', () => {
+    notificationsStore.addNotification({
+      type: NOTIFICATION_TYPE.Info,
+      message: 'Info Notification',
+    });
+
+    let notifications;
+    notificationsStore.subscribe(value => {
+      notifications = value.notifications;
+    })();
+
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0].message).toBe('Info Notification');
+    expect(notifications[0].count).toBe(1);
+    expect(notifications[0].icon).toBe('info');
+    expect(notifications[0].color).toBe('blue');
+  });
+
   it('should add multiple notifications', () => {
     notificationsStore.addNotification({
       message: 'Error Notification',
@@ -57,15 +105,6 @@ describe('notificationsStore', () => {
     })();
 
     expect(notifications).toHaveLength(2);
-    expect(notifications[0].message).toBe('Error Notification');
-    expect(notifications[0].count).toBe(1);
-    expect(notifications[0].icon).toBe('error');
-    expect(notifications[0].color).toBe('red');
-
-    expect(notifications[1].message).toBe('Warning Notification');
-    expect(notifications[1].count).toBe(1);
-    expect(notifications[1].icon).toBe('warning');
-    expect(notifications[1].color).toBe('yellow');
   });
 
   it('should update existing notification if the message is the same', () => {

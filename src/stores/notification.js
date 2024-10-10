@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 function defineNotificationStore() {
-  const { subscribe, update, set } = writable({ notifications: [] });
+  const { subscribe, update } = writable({ notifications: [] });
 
   const closeNotification = id => {
     update(prevState => {
@@ -63,7 +63,6 @@ function defineNotificationStore() {
   };
 
   return {
-    set,
     subscribe,
     addNotification,
     closeNotification,
