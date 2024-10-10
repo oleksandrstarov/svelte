@@ -59,7 +59,7 @@
   }
 </script>
 
-<div class="p-5 md:p-10">
+<div class="py-5 md:py-10">
   {#if weatherData.isLoading}
     <div>{$t('weeklyForecast.loading')}</div>
   {:else if weatherData.hasError}

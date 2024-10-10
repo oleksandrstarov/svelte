@@ -8,7 +8,7 @@
   import Notifications from './components/Notifications.svelte';
 </script>
 
-<main>
+<main class="pt-2 px-4 md:pt-5 md:px-10">
   {#if !$isLoading}
     <Header />
     <Router {routes} />

@@ -16,14 +16,12 @@ class PlacesService {
   async getAutocomplete(input) {
     try {
       const formattedInput = input.replace(/ /g, '%');
-      const endpoint = `${this.#getUrl(
-        'autocomplete',
-      )}&input=${formattedInput}&types=locality|sublocality`;
+      const endpoint = `${this.#getUrl('autocomplete')}&input=${formattedInput}&types=locality`;
 
       const response = await axios.get(endpoint);
 
       return response.data.predictions.map(({ description, place_id }) => ({
-        placeName: description,
+        address: description,
         placeId: place_id,
       }));
     } catch (e) {
@@ -66,6 +64,40 @@ class PlacesService {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
         message: `${get(t)('errors.getDetails')}`,
+      });
+      console.error(e.message);
+    }
+  }
+
+  async getSearch(query) {
+    try {
+      const endpoint = `${this.#getUrl('textsearch')}&query=${query}`;
+
+      const response = await axios.get(endpoint);
+
+      return response.data.results.reduce(
+        (
+          acc,
+          {
+            formatted_address,
+            geometry: {
+              location: { lat, lng },
+            },
+            place_id,
+          },
+        ) => {
+          if (!acc.some(item => item.address === formatted_address)) {
+            acc.push({ address: formatted_address, placeId: place_id, lat, lng });
+          }
+
+          return acc;
+        },
+        [],
+      );
+    } catch (e) {
+      notificationsStore.addNotification({
+        type: NOTIFICATION_TYPE.Error,
+        message: `${get(t)('errors.getSearch')}`,
       });
       console.error(e.message);
     }

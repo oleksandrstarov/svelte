@@ -27,10 +27,10 @@ export const removeFromHistory = placeId => {
   localStorage.setItem('locationsHistory', JSON.stringify(locationsHistory));
 };
 
-export const addToHistory = ({ placeName, placeId, lat, lng }) => {
+export const addToHistory = ({ address, placeId, lat, lng }) => {
   removeFromHistory(placeId);
 
-  const updatedHistory = [{ placeName, placeId, lat, lng }, ...locationsHistory].splice(0, 5);
+  const updatedHistory = [{ address, placeId, lat, lng }, ...locationsHistory].splice(0, 5);
 
   localStorage.setItem('locationsHistory', JSON.stringify(updatedHistory));
 
@@ -38,4 +38,4 @@ export const addToHistory = ({ placeName, placeId, lat, lng }) => {
 };
 
 export const getLocationsHistoryAutocomplete = () =>
-  locationsHistory?.map(({ placeId, placeName }) => ({ placeId, placeName })) || [];
+  locationsHistory?.map(({ placeId, address }) => ({ placeId, address })) || [];

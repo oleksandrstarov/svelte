@@ -21,7 +21,7 @@
   $: dayPeriod = getDayPeriodById(timeOfDayId);
 </script>
 
-<div class="p-5 md:p-10">
+<div class="py-5 md:py-10">
   <div class="pt-2 p-4 md:pt-5 md:px-10 rounded-lg shadow-[0px_5px_15px_rgba(0,0,0,0.35)]">
     <h2 class="flex items-center font-medium text-sm md:text-lg">
       <span class="material-symbols-outlined text-1xl md:text-2xl"> schedule </span>
