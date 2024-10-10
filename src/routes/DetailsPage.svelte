@@ -26,37 +26,30 @@
   };
 
   $: temperatureSign = temperatureUnitSymbols[$temperatureUnit];
-
   $: temperatureUnit.subscribe(() => {
     fetchWeather();
   });
 
   const fetchWeather = async () => {
     weatherData.isLoading = true;
-
     const { date, latitude: lat, longitude: lng } = params;
-
     const response = await weatherService.getHourlyForecast(lat, lng, date);
     hourlyData = response.map(data => ({
       ...data,
       time: DateTime.fromISO(data.time).toFormat('HH:mm'),
     }));
-
     if (!hourlyData.length) {
       weatherData.isLoading = false;
       weatherData.hasError = true;
 
       return;
     }
-
     hourlyData = hourlyData.map((el, idx) => ({
       ...el,
       dayPeriod: getDayPeriodByDate({ date: response[idx].time, lat, lng }),
     }));
-
     weatherData.isLoading = false;
   };
-
   onMount(async () => {
     fetchWeather();
   });
@@ -87,11 +80,11 @@
               {/if}
               <div class="text-lg">
                 <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}
-                  >{temperature}({temperatureSign})</span
+                  >{temperature} ({temperatureSign})</span
                 >
                 /
                 <span class={`text-${feelsLike >= 0 ? 'red' : 'blue'}-500`}
-                  >{feelsLike}({temperatureSign})</span
+                  >{feelsLike} ({temperatureSign})</span
                 >
               </div>
               <div class="text-sm">
@@ -111,36 +104,32 @@
       divClass="mt-2 m-4 md:mt-5 md:mx-10 rounded-3xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] hidden lg:block"
     >
       <TableHead>
-        <TableHeadCell class="text-center">{$t('hourlyForecast.time')}</TableHeadCell>
-        <TableHeadCell class="text-center">{$t('hourlyForecast.weather')}</TableHeadCell>
-        <TableHeadCell class="text-center"
-          >{$t('hourlyForecast.temperature')} ({temperatureSign})</TableHeadCell
-        >
-        <TableHeadCell class="text-center"
-          >{$t('hourlyForecast.feelsLike')} ({temperatureSign})</TableHeadCell
-        >
-        <TableHeadCell class="text-center">{$t('hourlyForecast.dewPoint')}</TableHeadCell>
-        <TableHeadCell class="text-center">{$t('hourlyForecast.precipitation')}</TableHeadCell>
-        <TableHeadCell class="text-center"
+        <TableHeadCell>{$t('hourlyForecast.time')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.weather')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.temperature')} ({temperatureSign})</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.feelsLike')} ({temperatureSign})</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.dewPoint')}</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.precipitation')}</TableHeadCell>
+        <TableHeadCell
           >{$t('hourlyForecast.windSpeed')} + {$t('hourlyForecast.windDirection')}</TableHeadCell
         >
-        <TableHeadCell class="text-center">{$t('hourlyForecast.windGusts')}</TableHeadCell>
-        <TableHeadCell class="max-xl:hidden table-cell text-center"
+        <TableHeadCell>{$t('hourlyForecast.windGusts')}</TableHeadCell>
+        <TableHeadCell class="max-xl:hidden table-cell"
           >{$t('hourlyForecast.pressure')}</TableHeadCell
         >
-        <TableHeadCell class="max-xl:hidden table-cell text-center"
+        <TableHeadCell class="max-xl:hidden table-cell"
           >{$t('hourlyForecast.humidity')}</TableHeadCell
         >
-        <TableHeadCell class="max-xl:hidden table-cell text-center"
+        <TableHeadCell class="max-xl:hidden table-cell"
           >{$t('hourlyForecast.cloudCover')}</TableHeadCell
         >
-        <TableHeadCell class="max-2xl:hidden table-cell text-center"
+        <TableHeadCell class="max-2xl:hidden table-cell"
           >{$t('hourlyForecast.visibility')}</TableHeadCell
         >
-        <TableHeadCell class="max-2xl:hidden table-cell text-center"
+        <TableHeadCell class="max-2xl:hidden table-cell"
           >{$t('hourlyForecast.evaporation')}</TableHeadCell
         >
-        <TableHeadCell class="max-2xl:hidden table-cell text-center"
+        <TableHeadCell class="max-2xl:hidden table-cell"
           >{$t('hourlyForecast.pressureDeficit')}</TableHeadCell
         >
       </TableHead>

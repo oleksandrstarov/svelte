@@ -6,6 +6,7 @@
     "search": "Пошук",
     "searchPlaceholder": "Введіть ваше місто",
     "nearby": "Поруч",
+    "moreSuggestions": "Більше результатів",
     "language": {
       "en": "АНГЛ",
       "ua": "УКР"
@@ -18,6 +19,14 @@
     "metersPerSecond": "м/с",
     "forecastMainBanner.noDataReceived": "Дані не отримані"
   },
+  "search": {
+    "searchResults": "Результати пошуку",
+    "searchResultsCount": "Показано {count} результатів для {query}:",
+    "enterLocation": "Будь ласка, введіть місце для пошуку",
+    "cantFind": "Не можете знайти місце, яке шукаєте?",
+    "checkName": "Перевірте правильність написання назви місця.",
+    "searchAnotherPlace": "Спробуйте пошукати інше місце."
+  },
   "errors": {
     "getDetails": "Помилка отримання даних про місце",
     "getAutocomplete": "Помилка отримання даних aвтодоповнення",
@@ -26,7 +35,8 @@
     "getHourlyForecast": "Помилка отримання даних погодинного прогнозу",
     "getBrowserLocation": "Помилка отримання місцезнаходження. Будь ласка перевірте чи увімкнена геолокація і перезавантажте сторінку",
     "geolocationNotSupported": "Геолокація не підтримується цим браузером",
-    "getLocalHistory": "Помилка отримання історії пошуку"
+    "getLocalHistory": "Помилка отримання історії пошуку",
+    "getSearch": "Помилка отримання результатів пошуку"
   },
   "weeklyForecast": {
     "weather": "Погода",
@@ -43,7 +53,7 @@
     "weather": "Погода",
     "temperature": "Темп",
     "feelsLike": "Відчувається як",
-    "dewPoint": "Точка роси %",
+    "dewPoint": "Точка роси (%)",
     "precipitation": "Опади (мм)",
     "windSpeed": "Вітер (м/с)",
     "windDirection": "Напрям",

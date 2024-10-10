@@ -6,6 +6,7 @@
     "search": "Search",
     "searchPlaceholder": "Enter your city",
     "nearby": "Nearby",
+    "moreSuggestions": "More suggestions",
     "language": {
       "en": "EN",
       "ua": "UA"
@@ -18,6 +19,14 @@
     "metersPerSecond": "m/s",
     "forecastMainBanner.noDataReceived": "No data received"
   },
+  "search": {
+    "searchResults": "Search results",
+    "searchResultsCount": "Showing {count} hits for {query}:",
+    "enterLocation": "Please enter location to search",
+    "cantFind": "Can't find the location you are looking for?",
+    "checkName": "Check that you spelled the location name correctly.",
+    "searchAnotherPlace": "Try searching for another location."
+  },
   "errors": {
     "getDetails": "Error fetching details data",
     "getAutocomplete": "Error fetching autocomplete data",
@@ -26,7 +35,8 @@
     "getHourlyForecast": "Error fetching hourly forecast data",
     "getBrowserLocation": "Error getting location. Please check is geolocation enabled and reload the page",
     "geolocationNotSupported": "Geolocation is not supported by browser",
-    "getLocalHistory": "Error getting search history"
+    "getLocalHistory": "Error getting search history",
+    "getSearch": "Error getting search results"
   },
   "weeklyForecast": {
     "weather": "Weather",
@@ -43,7 +53,7 @@
     "weather": "Weather",
     "temperature": "Temp",
     "feelsLike": "Feels like",
-    "dewPoint": "Dew Point %",
+    "dewPoint": "Dew Point (%)",
     "precipitation": "Precip. (mm)",
     "windSpeed": "Wind (m/s)",
     "windDirection": "Direction",
