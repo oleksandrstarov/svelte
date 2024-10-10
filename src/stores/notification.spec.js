@@ -36,7 +36,6 @@ describe('notificationsStore', () => {
     })();
 
     expect(notifications).toHaveLength(1);
-
     expect(notifications[0].message).toBe('Positive Notification');
     expect(notifications[0].count).toBe(1);
     expect(notifications[0].icon).toBe('check_circle');
@@ -47,7 +46,6 @@ describe('notificationsStore', () => {
     notificationsStore.addNotification({
       message: 'Error Notification',
     });
-
     notificationsStore.addNotification({
       type: NOTIFICATION_TYPE.Warning,
       message: 'Warning Notification',
@@ -59,7 +57,6 @@ describe('notificationsStore', () => {
     })();
 
     expect(notifications).toHaveLength(2);
-
     expect(notifications[0].message).toBe('Error Notification');
     expect(notifications[0].count).toBe(1);
     expect(notifications[0].icon).toBe('error');

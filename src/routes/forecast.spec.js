@@ -32,16 +32,14 @@ describe('ForecastPage Component', () => {
     });
 
     const forecastPage = screen.getByTestId('forecast-page');
+
     expect(forecastPage).toBeInTheDocument();
 
     await waitFor(() => {
       expect(weatherService.getWeather).toHaveBeenCalledWith(52.52, 13.405);
     });
 
-    const forecastBanner = screen.getByTestId('forecast-main-banner');
-    expect(forecastBanner).toBeInTheDocument();
-
-    const weeklyForecast = screen.getByTestId('weekly-forecast');
-    expect(weeklyForecast).toBeInTheDocument();
+    expect(screen.getByTestId('forecast-main-banner')).toBeInTheDocument();
+    expect(screen.getByTestId('weekly-forecast')).toBeInTheDocument();
   });
 });
