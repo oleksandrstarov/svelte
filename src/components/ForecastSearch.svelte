@@ -6,7 +6,7 @@
     getLocationsHistoryAutocomplete,
     removeFromHistory,
   } from '../utils/searchHistory';
-  import { location, push, querystring } from 'svelte-spa-router';
+  import { push, querystring } from 'svelte-spa-router';
   import { debounce } from 'lodash';
   import placesService from '../services/placeService';
   import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';

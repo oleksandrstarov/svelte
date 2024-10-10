@@ -1,10 +1,10 @@
-import Search from './Search.svelte';
-import Forecast from './Forecast.svelte';
-import Details from './Details.svelte';
+import SearchPage from './SearchPage.svelte';
+import ForecastPage from './ForecastPage.svelte';
+import DetailsPage from './DetailsPage.svelte';
 
 export const routes = {
-  '/': Search,
-  '/forecast/:latitude/:longitude': Forecast,
-  '/details/:latitude/:longitude/:date': Details,
-  '*': Search,
+  '/': SearchPage,
+  '/forecast/:latitude/:longitude': ForecastPage,
+  '/details/:latitude/:longitude/:date': DetailsPage,
+  '*': SearchPage,
 };

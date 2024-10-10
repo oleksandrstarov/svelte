@@ -4,7 +4,7 @@
   import { Select, Spinner } from 'flowbite-svelte';
   import placesService from '../services/placeService';
   import { t, locale } from 'svelte-i18n';
-  import ForecastAutocomplete from './ForecastSearch.svelte';
+  import ForecastSearch from './ForecastSearch.svelte';
 
   const languages = [
     { value: 'en-US', name: $t('header.language.en') },
@@ -59,7 +59,7 @@
     {/if}
   </div>
   <div class="flex grow justify-end">
-    <ForecastAutocomplete {isSearchButton} on:setIsSearchButton={setIsSearchButton} />
+    <ForecastSearch {isSearchButton} on:setIsSearchButton={setIsSearchButton} />
     {#if isSearchButton}
       <Select
         placeholder=""
