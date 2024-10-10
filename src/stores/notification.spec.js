@@ -37,7 +37,7 @@ describe('notificationsStore', () => {
     expect(notifications[0].color).toBe('green');
   });
 
-  it('should add error notifications', () => {
+  it('should add error notification', () => {
     notificationsStore.addNotification({
       message: 'Error Notification',
     });
@@ -54,7 +54,7 @@ describe('notificationsStore', () => {
     expect(notifications[0].color).toBe('red');
   });
 
-  it('should add warning notifications', () => {
+  it('should add warning notification', () => {
     notificationsStore.addNotification({
       type: NOTIFICATION_TYPE.Warning,
       message: 'Warning Notification',
@@ -72,7 +72,7 @@ describe('notificationsStore', () => {
     expect(notifications[0].color).toBe('yellow');
   });
 
-  it('should add info notifications', () => {
+  it('should add info notification', () => {
     notificationsStore.addNotification({
       type: NOTIFICATION_TYPE.Info,
       message: 'Info Notification',
