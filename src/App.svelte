@@ -14,7 +14,7 @@
     <Router {routes} />
     <Notifications />
   {:else}
-    <div class="w-screen h-screen flex justify-center items-center">
+    <div data-testid="spinner-element" class="w-screen h-screen flex justify-center items-center">
       <Spinner />
     </div>
   {/if}
