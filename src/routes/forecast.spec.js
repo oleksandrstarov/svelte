@@ -4,10 +4,10 @@ import { expect, it, vi, describe, beforeEach } from 'vitest';
 import { init, locale, register } from 'svelte-i18n';
 import ForecastPage from './ForecastPage.svelte';
 
-vi.mock('../services/weatherService'); // Mocking the weather service
+vi.mock('../services/weatherService');
 
 beforeEach(() => {
-  register('en', () => import('../i18n/en.json')); // Adjust to your locale path
+  register('en', () => import('../i18n/en.json'));
   init({ fallbackLocale: 'en' });
   locale.set('en');
 });

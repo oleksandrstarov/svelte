@@ -5,7 +5,7 @@ import { isLoading } from 'svelte-i18n';
 import { init, register, locale } from 'svelte-i18n';
 
 beforeEach(() => {
-  register('en', () => import('./i18n/en.json')); // Adjust to your locale path
+  register('en', () => import('./i18n/en.json'));
   init({ fallbackLocale: 'en' });
   locale.set('en');
 });
