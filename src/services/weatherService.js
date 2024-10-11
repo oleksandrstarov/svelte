@@ -10,7 +10,7 @@ const baseUrl = 'https://api.open-meteo.com/v1';
 class WeatherService {
   async getWeather(latitude, longitude) {
     try {
-      const temperatureUnit = this.getTemperatureUnit();
+      const temperatureUnit = this.#getTemperatureUnit();
 
       const params = {
         latitude,
@@ -44,7 +44,7 @@ class WeatherService {
 
   async getWeeklyForecast(latitude, longitude) {
     try {
-      const temperatureUnit = this.getTemperatureUnit();
+      const temperatureUnit = this.#getTemperatureUnit();
 
       const params = {
         latitude,
@@ -56,6 +56,7 @@ class WeatherService {
       };
 
       const response = await axios.get(`${baseUrl}/forecast`, { params });
+      setTimeout(() => {}, 3000);
 
       return {
         daily: response.data.daily,
@@ -71,7 +72,7 @@ class WeatherService {
 
   async getHourlyForecast(latitude, longitude, selectedDate) {
     try {
-      const temperatureUnit = this.getTemperatureUnit();
+      const temperatureUnit = this.#getTemperatureUnit();
 
       const params = {
         latitude,
@@ -130,7 +131,7 @@ class WeatherService {
     }
   }
 
-  getTemperatureUnit() {
+  #getTemperatureUnit() {
     return get(temperatureUnit) === 'f' ? 'fahrenheit' : 'celsius';
   }
 }

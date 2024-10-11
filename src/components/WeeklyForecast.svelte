@@ -12,6 +12,7 @@
   import { link, push } from 'svelte-spa-router';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { t } from 'svelte-i18n';
+  import { Spinner } from 'flowbite-svelte';
   import { temperatureUnit } from '../stores/temperature';
   import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
 
@@ -64,10 +65,13 @@
   }
 </script>
 
-<div class="py-5 md:py-10">
+<div class="py-5 md:py-10 relative z-0">
   {#if weatherData.isLoading}
-    <div>{$t('weeklyForecast.loading')}</div>
-  {:else if weatherData.hasError}
+    <div class="absolute left-[40rem] top-[20rem] z-10">
+      <Spinner size={10} />
+    </div>
+  {/if}
+  {#if weatherData.hasError}
     <div>{$t('errors.getWeeklyForecast')}</div>
   {:else}
     <div class="block lg:hidden">

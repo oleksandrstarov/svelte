@@ -50,11 +50,6 @@
     isAddressLoading = false;
     currentAddress = address;
   };
-
-  const handleUnitChange = event => {
-    const newUnit = event.target.value;
-    temperatureUnit.set(newUnit);
-  };
 </script>
 
 <header class="flex justify-center flex-wrap sm:justify-between sm:items-center sticky">
@@ -79,17 +74,17 @@
     {#if isSearchButton}
       <Select
         placeholder=""
-        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold cursor-pointer"
         items={languages}
         value={selectedLang}
         on:input={({ target: { value } }) => locale.set(value)}
       />
       <Select
         placeholder=""
-        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold cursor-pointer"
         items={temperatureUnits}
         value={selectedTemperatureUnit}
-        on:change={handleUnitChange}
+        on:change={({ target: { value } }) => temperatureUnit.set(value)}
       />
     {/if}
   </div>

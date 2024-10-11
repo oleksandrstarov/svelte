@@ -8,8 +8,8 @@
     TableHeadCell,
   } from 'flowbite-svelte';
   import { DateTime } from 'luxon';
-  import { onMount } from 'svelte';
   import { t } from 'svelte-i18n';
+  import { Spinner } from 'flowbite-svelte';
   import weatherService from '../services/weatherService';
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { getDayPeriodByDate } from '../utils/dayPeriod';
@@ -19,7 +19,6 @@
   export let params;
 
   let hourlyData = [];
-
   const weatherData = {
     isLoading: false,
     hasError: false,
@@ -50,15 +49,17 @@
     }));
     weatherData.isLoading = false;
   };
-  onMount(async () => {
-    fetchWeather();
-  });
 </script>
 
-<div class="p-5 md:p-10">
+<div class="flex items-center px-5 md:px-10 pt-5 md:pt-10 relative">
   {#if weatherData.isLoading}
-    <div>{$t('weeklyForecast.loading')}</div>
-  {:else if weatherData.hasError}
+    <div class="absolute left-[45rem] top-[20rem]">
+      <Spinner size={10} />
+    </div>
+  {/if}
+</div>
+<div>
+  {#if weatherData.hasError}
     <div>{$t('errors.getWeeklyForecast')}</div>
   {:else}
     <div class="block lg:hidden">
@@ -68,9 +69,7 @@
             <div
               class="bg-white rounded-xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] p-4 flex flex-col items-center"
             >
-              <div class="text-center font-bold">
-                {time ?? ''}
-              </div>
+              <div class="text-center font-bold">{time ?? ''}</div>
               {#if weatherCode !== null && weatherCodes[weatherCode]?.[dayPeriod]?.image}
                 <img
                   class="w-16 h-16 object-cover"
@@ -101,7 +100,7 @@
 
     <Table
       hoverable={true}
-      divClass="mt-2 m-4 md:mt-5 md:mx-10 rounded-3xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] hidden lg:block"
+      divClass="mt-2 rounded-3xl shadow-[0px_5px_15px_rgba(0,0,0,0.35)] hidden lg:block"
     >
       <TableHead>
         <TableHeadCell>{$t('hourlyForecast.time')}</TableHeadCell>
