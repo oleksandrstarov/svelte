@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.js'],
   },
+  base: 'svelte',
   server: {
     proxy: {
       '/place-api': {
