@@ -11,7 +11,7 @@ beforeEach(() => {
 });
 
 describe('App', () => {
-  it('should render header, and notifications components when not loading', () => {
+  it('should render header and notifications components when not loading', () => {
     isLoading.set(false);
 
     render(App);

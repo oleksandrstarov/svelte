@@ -10,6 +10,7 @@
     "format:fix": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "test": "vitest run",
     "test:unit": "vitest --coverage"
   },
   "dependencies": {
