@@ -65,7 +65,7 @@
   }
 </script>
 
-<div class="py-5 md:py-10 relative z-0">
+<div data-testid="weekly-forecast" class="py-5 md:py-10 relative z-0">
   {#if weatherData.isLoading}
     <div class="absolute left-[40rem] top-[20rem] z-10">
       <Spinner size={10} />

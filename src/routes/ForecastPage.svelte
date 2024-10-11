@@ -40,5 +40,7 @@
   }
 </script>
 
-<ForecastMainBanner {...weatherData} />
-<WeeklyForecast latitude={params.latitude} longitude={params.longitude} />
+<div data-testid="forecast-page">
+  <ForecastMainBanner {...weatherData} />
+  <WeeklyForecast latitude={params.latitude} longitude={params.longitude} />
+</div>

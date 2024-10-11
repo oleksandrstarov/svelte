@@ -134,24 +134,7 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#if hourlyData.length}
-          {#each hourlyData as {
-            time,
-            weatherCode,
-            dayPeriod,
-            temperature,
-            feelsLike,
-            dewPoint,
-            precipitation,
-            windSpeed,
-            windDirection,
-            windGusts,
-            pressure,
-            humidity,
-            cloudCover,
-            visibility,
-            evapotranspiration,
-            vpd
-            }}
+          {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, dewPoint, precipitation, windSpeed, windDirection, windGusts, pressure, humidity, cloudCover, visibility, evapotranspiration, vpd }}
             <TableBodyRow class="text-center">
               <TableBodyCell>{time ?? ''}</TableBodyCell>
               <TableBodyCell class="hidden md:table-cell">

@@ -52,7 +52,10 @@
   };
 </script>
 
-<header class="flex justify-center flex-wrap sm:justify-between sm:items-center sticky">
+<header
+  data-testid="header-element"
+  class="flex justify-center flex-wrap sm:justify-between sm:items-center sticky"
+>
   <div class="flex sm:items-center">
     <a class="flex items-center" use:link={{ href: '/' }}>
       <img class="h-12" src={logo} alt="logo" />
