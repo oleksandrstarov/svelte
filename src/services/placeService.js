@@ -8,9 +8,7 @@ const apiKey = env.VITE_GMAPS_API_KEY;
 
 class PlacesService {
   #getUrl(name) {
-    return env.VITE_NODE_ENV === 'production'
-      ? `https://maps.googleapis.com/maps/api/place/${name}/json?key=${apiKey}`
-      : `/place-api/${name}/json?key=${apiKey}`;
+    return `/place-api/${name}/json?key=${apiKey}`;
   }
 
   async getAutocomplete(input) {
