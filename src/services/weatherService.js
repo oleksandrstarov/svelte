@@ -3,18 +3,22 @@ import { NOTIFICATION_TYPE, notificationsStore } from '../stores/notification';
 import { get } from 'svelte/store';
 import { t } from 'svelte-i18n';
 import { DateTime } from 'luxon';
+import { temperatureUnit } from '../stores/temperature';
 
 const baseUrl = 'https://api.open-meteo.com/v1';
 
 class WeatherService {
   async getWeather(latitude, longitude) {
     try {
+      const temperatureUnit = this.#getTemperatureUnit();
+
       const params = {
         latitude,
         longitude,
         current:
           'temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day',
         timezone: 'auto',
+        temperature_unit: `${temperatureUnit}`,
       };
 
       const response = await axios.get(`${baseUrl}/forecast`, { params });
@@ -40,15 +44,19 @@ class WeatherService {
 
   async getWeeklyForecast(latitude, longitude) {
     try {
+      const temperatureUnit = this.#getTemperatureUnit();
+
       const params = {
         latitude,
         longitude,
         daily:
           'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
         timezone: 'auto',
+        temperature_unit: `${temperatureUnit}`,
       };
 
       const response = await axios.get(`${baseUrl}/forecast`, { params });
+      setTimeout(() => {}, 3000);
 
       return {
         daily: response.data.daily,
@@ -64,6 +72,8 @@ class WeatherService {
 
   async getHourlyForecast(latitude, longitude, selectedDate) {
     try {
+      const temperatureUnit = this.#getTemperatureUnit();
+
       const params = {
         latitude,
         longitude,
@@ -86,7 +96,9 @@ class WeatherService {
           .trim()
           .replace(/\s+/g, ''),
         timezone: 'auto',
+        temperature_unit: `${temperatureUnit}`,
       };
+
       const now = DateTime.now();
 
       const { data } = await axios.get(`${baseUrl}/forecast`, { params });
@@ -117,6 +129,10 @@ class WeatherService {
       });
       console.error(e.message);
     }
+  }
+
+  #getTemperatureUnit() {
+    return get(temperatureUnit) === 'f' ? 'fahrenheit' : 'celsius';
   }
 }
 

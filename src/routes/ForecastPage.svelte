@@ -2,6 +2,7 @@
   import ForecastMainBanner from '../components/ForecastMainBanner.svelte';
   import weatherService from '../services/weatherService';
   import WeeklyForecast from '../components/WeeklyForecast.svelte';
+  import { temperatureUnit } from '../stores/temperature';
 
   export let params;
 
@@ -34,7 +35,7 @@
     };
   }
 
-  $: if (params.latitude && params.longitude) {
+  $: if ((params.latitude && params.longitude) || $temperatureUnit) {
     fetchWeatherData(params.latitude, params.longitude);
   }
 </script>

@@ -5,15 +5,22 @@
   import placesService from '../services/placeService';
   import { t, locale } from 'svelte-i18n';
   import ForecastSearch from './ForecastSearch.svelte';
+  import { temperatureUnit } from '../stores/temperature';
 
   const languages = [
     { value: 'en-US', name: $t('header.language.en') },
     { value: 'ua-UA', name: $t('header.language.ua') },
   ];
 
+  const temperatureUnits = [
+    { value: 'c', name: '°C' },
+    { value: 'f', name: '°F' },
+  ];
+
   let isSearchButton = true;
   let isAddressLoading = '';
   let currentAddress = '';
+  let selectedTemperatureUnit = '';
 
   $: isSearchPage = $location.includes('/search');
   $: selectedLang = $locale;
@@ -25,6 +32,10 @@
       currentAddress = '';
     }
   }
+
+  temperatureUnit.subscribe(unit => {
+    selectedTemperatureUnit = unit;
+  });
 
   const setIsSearchButton = ({ detail }) => {
     isSearchButton = detail;
@@ -66,10 +77,17 @@
     {#if isSearchButton}
       <Select
         placeholder=""
-        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold"
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold cursor-pointer"
         items={languages}
         value={selectedLang}
         on:input={({ target: { value } }) => locale.set(value)}
+      />
+      <Select
+        placeholder=""
+        class="w-20 h-12 m-2 border-primary-700 bg-white text-primary-700 font-semibold cursor-pointer"
+        items={temperatureUnits}
+        value={selectedTemperatureUnit}
+        on:change={({ target: { value } }) => temperatureUnit.set(value)}
       />
     {/if}
   </div>

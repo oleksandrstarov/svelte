@@ -4,6 +4,7 @@
 
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { getDayPeriodById } from '../utils/dayPeriod';
+  import TemperatureSymbol from './TemperatureSymbol.svelte';
 
   export let {
     temperature,
@@ -21,7 +22,7 @@
   $: dayPeriod = getDayPeriodById(timeOfDayId);
 </script>
 
-<div data-testid="forecast-main-banner" class="py-5 md:py-10">
+<div data-testid="forecast-main-banner" class="py-5 md:py-10 relative">
   <div class="pt-2 p-4 md:pt-5 md:px-10 rounded-lg shadow-[0px_5px_15px_rgba(0,0,0,0.35)]">
     <h2 class="flex items-center font-medium text-sm md:text-lg">
       <span class="material-symbols-outlined text-1xl md:text-2xl"> schedule </span>
@@ -29,10 +30,11 @@
     </h2>
 
     {#if isLoading}
-      <div class="flex justify-center items-center p-4 md: pt-5">
-        <Spinner />
+      <div class="p-4 md: pt-5 absolute left-[40rem] top-[7rem]">
+        <Spinner size={10} />
       </div>
-    {:else if hasError}
+    {/if}
+    {#if hasError}
       <div class="flex justify-center items-center p-4 md: pt-5">
         <p>{$t('forecastMainBanner.noDataReceived')}</p>
       </div>
@@ -53,7 +55,8 @@
                   temperature >= 0 ? 'red' : 'blue'
                 }-500 md:hidden m-3`}
               >
-                {temperature}°
+                {temperature}
+                <TemperatureSymbol />
               </span>
             {/if}
           </div>
@@ -68,13 +71,15 @@
                   temperature >= 0 ? 'red' : 'blue'
                 }-500 hidden md:block`}
               >
-                {temperature}°
+                {temperature}
+                <TemperatureSymbol />
               </span>
               {#if feelsLike !== null}
                 <span class="ml-2 md:ml-4 text-sm md:text-lg">
                   {$t('forecastMainBanner.feelsLike')}
                   <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}>
-                    {feelsLike}°
+                    {feelsLike}
+                    <TemperatureSymbol />
                   </span>
                 </span>
               {/if}
