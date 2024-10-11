@@ -14,7 +14,7 @@
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { getDayPeriodByDate } from '../utils/dayPeriod';
   import { temperatureUnit } from '../stores/temperature';
-  import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
+  import TemperatureSymbol from '../components/TemperatureSymbol.svelte';
 
   export let params;
 
@@ -24,7 +24,6 @@
     hasError: false,
   };
 
-  $: temperatureSign = temperatureUnitSymbols[$temperatureUnit];
   $: temperatureUnit.subscribe(() => {
     fetchWeather();
   });
@@ -79,11 +78,11 @@
               {/if}
               <div class="text-lg">
                 <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}
-                  >{temperature} ({temperatureSign})</span
+                  >{temperature} (<TemperatureSymbol />)</span
                 >
                 /
                 <span class={`text-${feelsLike >= 0 ? 'red' : 'blue'}-500`}
-                  >{feelsLike} ({temperatureSign})</span
+                  >{feelsLike} (<TemperatureSymbol />)</span
                 >
               </div>
               <div class="text-sm">
@@ -105,8 +104,8 @@
       <TableHead>
         <TableHeadCell>{$t('hourlyForecast.time')}</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.weather')}</TableHeadCell>
-        <TableHeadCell>{$t('hourlyForecast.temperature')} ({temperatureSign})</TableHeadCell>
-        <TableHeadCell>{$t('hourlyForecast.feelsLike')} ({temperatureSign})</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.temperature')} (<TemperatureSymbol />)</TableHeadCell>
+        <TableHeadCell>{$t('hourlyForecast.feelsLike')} (<TemperatureSymbol />)</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.dewPoint')}</TableHeadCell>
         <TableHeadCell>{$t('hourlyForecast.precipitation')}</TableHeadCell>
         <TableHeadCell
@@ -134,6 +133,7 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#if hourlyData.length}
+          <!-- eslint-disable-next-line max-len -->
           {#each hourlyData as { time, weatherCode, dayPeriod, temperature, feelsLike, dewPoint, precipitation, windSpeed, windDirection, windGusts, pressure, humidity, cloudCover, visibility, evapotranspiration, vpd }}
             <TableBodyRow class="text-center">
               <TableBodyCell>{time ?? ''}</TableBodyCell>

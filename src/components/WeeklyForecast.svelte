@@ -14,7 +14,7 @@
   import { t } from 'svelte-i18n';
   import { Spinner } from 'flowbite-svelte';
   import { temperatureUnit } from '../stores/temperature';
-  import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
+  import TemperatureSymbol from './TemperatureSymbol.svelte';
 
   export let latitude;
   export let longitude;
@@ -25,15 +25,12 @@
   };
   let forecastData = [];
   const detailsRoute = '/details';
-  let temperatureSign;
 
   function formatDate(dateString) {
     return DateTime.fromISO(dateString).toFormat('cccc dd LLL');
   }
 
   async function fetchWeatherData(latitude, longitude) {
-    temperatureSign = temperatureUnitSymbols[$temperatureUnit];
-
     weatherData.isLoading = true;
     weatherData.hasError = false;
 
@@ -90,11 +87,11 @@
             {/if}
             <div class="text-lg">
               <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}
-                >{maxTemp}{temperatureSign}</span
+                >{maxTemp} <TemperatureSymbol /></span
               >
               /
               <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}
-                >{minTemp}{temperatureSign}</span
+                >{minTemp} <TemperatureSymbol /></span
               >
             </div>
             <div class="text-sm">
@@ -146,11 +143,11 @@
               </TableBodyCell>
               <TableBodyCell>
                 <span class={`text-${maxTemp >= 0 ? 'red' : 'blue'}-500`}
-                  >{maxTemp}{temperatureSign}</span
+                  >{maxTemp} <TemperatureSymbol /></span
                 >
                 /
                 <span class={`text-${minTemp >= 0 ? 'red' : 'blue'}-500`}
-                  >{minTemp}{temperatureSign}</span
+                  >{minTemp} <TemperatureSymbol /></span
                 >
               </TableBodyCell>
               <TableBodyCell class="hidden md:table-cell text-blue-500">

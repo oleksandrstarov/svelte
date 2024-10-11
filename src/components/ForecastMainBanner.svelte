@@ -4,8 +4,7 @@
 
   import weatherCodes from '../assets/weather-interpretation-code-description.json';
   import { getDayPeriodById } from '../utils/dayPeriod';
-  import { temperatureUnit } from '../stores/temperature';
-  import { temperatureUnitSymbols } from '../constants/temperatureUnitSymbols';
+  import TemperatureSymbol from './TemperatureSymbol.svelte';
 
   export let {
     temperature,
@@ -19,8 +18,6 @@
     isLoading,
     hasError,
   } = {};
-
-  $: temperatureSign = temperatureUnitSymbols[$temperatureUnit];
 
   $: dayPeriod = getDayPeriodById(timeOfDayId);
 </script>
@@ -58,7 +55,8 @@
                   temperature >= 0 ? 'red' : 'blue'
                 }-500 md:hidden m-3`}
               >
-                {temperature}{temperatureSign}
+                {temperature}
+                <TemperatureSymbol />
               </span>
             {/if}
           </div>
@@ -73,13 +71,15 @@
                   temperature >= 0 ? 'red' : 'blue'
                 }-500 hidden md:block`}
               >
-                {temperature}{temperatureSign}
+                {temperature}
+                <TemperatureSymbol />
               </span>
               {#if feelsLike !== null}
                 <span class="ml-2 md:ml-4 text-sm md:text-lg">
                   {$t('forecastMainBanner.feelsLike')}
                   <span class={`text-${temperature >= 0 ? 'red' : 'blue'}-500`}>
-                    {feelsLike}{temperatureSign}
+                    {feelsLike}
+                    <TemperatureSymbol />
                   </span>
                 </span>
               {/if}
