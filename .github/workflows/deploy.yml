@@ -26,15 +26,15 @@ jobs:
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages
-          path: ./dist
+          name: dist
+          path: ./dist/
 
   deploy:
     permissions:
       id-token: write
       pages: write
     environment:
-      name: github-pages
+      name: dist
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
