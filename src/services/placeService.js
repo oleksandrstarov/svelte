@@ -5,12 +5,20 @@ import axios from '../utils/cachedAxios';
 
 const env = import.meta.env;
 const apiKey = env.VITE_GMAPS_API_KEY;
+const rapidApiHost = 'google-map-places.p.rapidapi.com';
 
 class PlacesService {
   #getUrl(name) {
     return env.VITE_NODE_ENV === 'production'
-      ? `https://maps.googleapis.com/maps/api/place/${name}/json?key=${apiKey}`
+      ? `https://${rapidApiHost}/maps/api/place/${name}/json?key=${apiKey}`
       : `/place-api/${name}/json?key=${apiKey}`;
+  }
+
+  #getHeaders() {
+    return {
+      'x-rapidapi-host': rapidApiHost,
+      'x-rapidapi-key': env.VITE_GMAPS_RAPID_API_KEY,
+    };
   }
 
   async getAutocomplete(input) {
@@ -18,7 +26,7 @@ class PlacesService {
       const formattedInput = input.replace(/ /g, '%');
       const endpoint = `${this.#getUrl('autocomplete')}&input=${formattedInput}&types=locality`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(endpoint, { headers: { ...this.#getHeaders() } });
 
       return response.data.predictions.map(({ description, place_id }) => ({
         address: description,
@@ -27,7 +35,7 @@ class PlacesService {
     } catch (e) {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
-        message: `${get(t)('errors.getAutocomplete')}`,
+        message: get(t)('errors.getAutocomplete'),
       });
       console.error(e.message);
     }
@@ -37,7 +45,7 @@ class PlacesService {
     try {
       const endpoint = `${this.#getUrl('details')}&place_id=${placeId}`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(endpoint, { headers: { ...this.#getHeaders() } });
 
       return {
         location: response.data.result.geometry.location,
@@ -46,24 +54,25 @@ class PlacesService {
     } catch (e) {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
-        message: `${get(t)('errors.getDetails')}`,
+        message: get(t)('errors.getDetails'),
       });
       console.error(e.message);
     }
   }
+
   async getId(latitude, longitude) {
     try {
       const endpoint = `${this.#getUrl(
         'nearbysearch',
       )}&location=${latitude},${longitude}&radius=1000`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(endpoint, { headers: { ...this.#getHeaders() } });
 
       return response.data.results[0]?.place_id;
     } catch (e) {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
-        message: `${get(t)('errors.getDetails')}`,
+        message: get(t)('errors.getDetails'),
       });
       console.error(e.message);
     }
@@ -73,7 +82,7 @@ class PlacesService {
     try {
       const endpoint = `${this.#getUrl('textsearch')}&query=${query}`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(endpoint, { headers: { ...this.#getHeaders() } });
 
       return response.data.results.reduce(
         (
@@ -97,7 +106,7 @@ class PlacesService {
     } catch (e) {
       notificationsStore.addNotification({
         type: NOTIFICATION_TYPE.Error,
-        message: `${get(t)('errors.getSearch')}`,
+        message: get(t)('errors.getSearch'),
       });
       console.error(e.message);
     }
